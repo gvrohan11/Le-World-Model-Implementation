@@ -6,8 +6,11 @@ from losses.sigreg import sigreg_loss
 
 '''
 Combining sigreg, encoder, and predictor into 1
-Wire everything into a single training step: take a real frame, the next frame, encode both, have the predictor guess the next embedding
-from the current one plus the action, and combine 2 losses: how wrong the prediction was, plus SIGReg keeping the embeddings healthy
+Wire everything into a single training step: take a real frame, the next frame, 
+encode both, 
+have the predictor guess the next embedding from the current one plus the action 
+combine 2 losses: how wrong the prediction was, 
+plus SIGReg keeping the embeddings healthy
 '''
 
 def training_step(encoder, predictor, frame, next_frame, action, sigreg_weight=1.0):
@@ -32,3 +35,4 @@ if __name__ == "__main__":
         total.backward()
         opt.step()
         print(f"Step {i}: total={total.item():.4f} pred={pl.item():.4f} sigreg={rl.item():.4f}")
+    
