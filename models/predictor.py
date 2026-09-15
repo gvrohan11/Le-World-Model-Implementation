@@ -1,8 +1,13 @@
 import torch
 import torch.nn as nn
 
+'''
+Predictor: this takes the current frame's embedding (from encoder) + action the robot took (from policy) and predicts the next frame's embedding
+This
+'''
+
 class Predictor(nn.Module):
-    def __init__(self, dim, action_dim, hidden):
+    def __init__(self, dim=256, action_dim=7, hidden=512):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(dim + action_dim, hidden),

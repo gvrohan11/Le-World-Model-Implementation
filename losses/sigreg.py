@@ -1,5 +1,10 @@
 import torch
 
+'''
+SigReg: regularizes the encoder's embeddings to so they actually produce informative content
+Projects embeddings onto random directions
+'''
+
 def sigreg_loss(Z, n_directions=128, t_max=5.0, n_knots=33):
     B, D = Z.shape
 

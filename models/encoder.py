@@ -1,8 +1,15 @@
 import torch
 import torch.nn as nn
 
+'''
+Building the encoder: takes a camera image as input and converts it to a short list of numbers capturing what's in the scene
+This file will produce embeddings for sigreg
+Everything from model will read from these embeddings
+This encoder is untrained. The training (sigreg + predictor) turns these embeddings (number list) into one vector with meaning
+'''
+
 class Encoder(nn.Module):
-    def __init__(self, img_size, patch, in_ch, dim, depth, heads):
+    def __init__(self, img_size=64, patch=8, in_ch=3, dim=256, depth=4, heads=4):
         super().__init__()
         n_patches = (img_size // patch) ** 2 # this 
 
