@@ -6,6 +6,17 @@ from models.predictor import Predictor
 from losses.sigreg import sigreg_loss
 from dataset import SO100Pairs
 
+'''
+Training process:
+1. Encode current frame
+2. Encode the real next frame (real answer)
+3. Predictor guesses the next embedding from current frame + action (predicted answer)
+4. Calculate Prediction loss: real - predicted
+5. Calculate how un-spread the embeddings are (sigreg)
+6. Nudge the encoder and predictor to shrink that loss and un-spreadedness
+7. Repeat MAX_STEPS times
+'''
+
 DATASET = "so100-data/svla_so100_pickplace.h5"
 BATCH = 62
 LR = 1e-4
@@ -21,6 +32,7 @@ def main():
         device = "cuda"
     else:
         device = "cpu"
+    print(f"Device: {device}")
 
     encoder = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device)
     predictor = Predictor(dim=192, action_dim=6, hidden=512).to(device)

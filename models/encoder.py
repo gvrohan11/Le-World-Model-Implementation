@@ -23,8 +23,6 @@ class Encoder(nn.Module):
         self.transformer = nn.TransformerEncoder(layer, num_layers=depth)
         self.norm = nn.LayerNorm(dim)
 
-
-
     def forward(self, x):
         x = self.patch_embed(x)
         x = x.flatten(2).transpose(1, 2)
