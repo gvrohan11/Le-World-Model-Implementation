@@ -1,0 +1,65 @@
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader
+from models.encoder import Encoder
+from models.predictor import Predictor
+from losses.sigreg import sigreg_loss
+from dataset import SO100Pairs
+
+DATASET = "so100-data/svla_so100_pickplace.h5"
+BATCH = 62
+LR = 1e-4
+MAX_STEPS = 50000
+SIGREG_W = 1.0
+LOG_EVERY = 50
+CKPT_EVERY = 1000
+CKPT_PATH = "lewm.pt"
+
+def main():
+    device = ""
+    if torch.cuda.is_available():
+        device = "cuda"
+    else:
+        device = "cpu"
+
+    encoder = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device)
+    predictor = Predictor(dim=192, action_dim=6, hidden=512).to(device)
+
+    ds = SO100Pairs(DATASET)
+    loader = DataLoader(ds, batch_size=BATCH, shuffle=True, num_workers=4, pin_memory=(device == "cuda"), drop_last=True)
+    print(f"Training Pairs: {len(ds)}")
+    opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=LR)
+
+    step = 0
+    while step < MAX_STEPS:
+        for frame, next_frame, action in loader:
+            frame = frame.to(device, non_blocking=True)
+            next_frame = next_frame.to(device, non_blocking=True)
+            action = action.to(device, non_blocking=True)
+            z = encoder(frame)
+            z_next = encoder(next_frame)
+            z_hat = predictor(z, action) # predict next embedding from z
+
+            pred_loss = nn.functional.mse_loss(z_hat, z_next)
+            reg_loss = sigreg_loss(z)
+            loss = pred_loss + (SIGREG_W * reg_loss)
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            step += 1
+
+            if step % LOG_EVERY == 0:
+                print(f"step {step:6d} | total {loss.item():.4f} | pred {pred_loss.item():.6f} | sigreg {reg_loss.item():.4f}")
+            if step % CKPT_EVERY == 0:
+                torch.save({"encoder": encoder.state_dict(), "predictor": predictor.state_dict(),
+                            "optimizer": opt.state_dict(), "step": step}, CKPT_PATH)
+                print(f"  [checkpoint saved at step {step}]")
+            if step >= MAX_STEPS:
+                break
+
+    torch.save({"encoder": encoder.state_dict(), "predictor": predictor.state_dict(),
+                "optimizer": opt.state_dict(), "step": step}, CKPT_PATH)
+    print("training complete — final checkpoint saved to", CKPT_PATH)
+
+if __name__ == "__main__":
+    main()

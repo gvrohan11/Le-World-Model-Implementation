@@ -34,8 +34,8 @@ class Encoder(nn.Module):
         return x.mean(dim=1)
 
 if __name__ == "__main__":
-    enc = Encoder(img_size=64, patch=8, in_ch=3, dim=256, depth=4, heads=4)
-    imgs = torch.randn(16, 3, 64, 64)
+    enc = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3)
+    imgs = torch.randn(16, 3, 224, 224)
     z = enc(imgs)
     print(f"Images in: {tuple(imgs.shape)}")
     print(f"Embeddings: {tuple(z.shape)}")

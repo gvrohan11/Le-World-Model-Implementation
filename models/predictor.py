@@ -22,9 +22,9 @@ class Predictor(nn.Module):
         return self.net(za)
 
 if __name__ == "__main__":
-    pred = Predictor(dim=256, action_dim=7, hidden=512)
-    z = torch.randn(16, 256)
-    a = torch.randn(16, 7)
+    pred = Predictor(dim=192, action_dim=6, hidden=512)
+    z = torch.randn(16, 192)
+    a = torch.randn(16, 6)
     z_next_hat = pred(z, a)
     print(f"Current Embedding: {tuple(z.shape)}")
     print(f"Action: {tuple(a.shape)}")
