@@ -6,6 +6,9 @@ from models.predictor import Predictor
 from losses.sigreg import sigreg_loss
 from dataset import SO100Pairs
 
+import time
+from datetime import datetime
+
 '''
 Training process:
 1. Encode current frame
@@ -42,6 +45,9 @@ def main():
     print(f"Training Pairs: {len(ds)}")
     opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=LR)
 
+    start_time = time.time()
+    print(f"Training started at {datetime.now().strftime('%H:%M:%S')}")
+
     step = 0
     while step < MAX_STEPS:
         for frame, next_frame, action in loader:
@@ -61,17 +67,25 @@ def main():
             step += 1
 
             if step % LOG_EVERY == 0:
-                print(f"step {step:6d} | total {loss.item():.4f} | pred {pred_loss.item():.6f} | sigreg {reg_loss.item():.4f}")
+                time_now = datetime.now().strftime('%H:%M:%S')
+                print(f"[{time_now}] step {step:6d} | total {loss.item():.4f} | pred {pred_loss.item():.6f} | sigreg {reg_loss.item():.4f}")
             if step % CKPT_EVERY == 0:
+                time_now = datetime.now().strftime('%H:%M:%S')
                 torch.save({"encoder": encoder.state_dict(), "predictor": predictor.state_dict(),
                             "optimizer": opt.state_dict(), "step": step}, CKPT_PATH)
-                print(f"  [checkpoint saved at step {step}]")
+                print(f"  [{time_now}] [checkpoint saved at step {step}]")
             if step >= MAX_STEPS:
                 break
 
     torch.save({"encoder": encoder.state_dict(), "predictor": predictor.state_dict(),
                 "optimizer": opt.state_dict(), "step": step}, CKPT_PATH)
     print("training complete — final checkpoint saved to", CKPT_PATH)
+
+    end_time = time.time()
+    print(f"Training ended at {datetime.now().strftime('%H:%M:%S')}")
+
+    total_seconds = end_time - start_time
+    print(f"Total training time: {total_seconds:.1f} seconds  ({total_seconds/60:.1f} minutes)")
 
 if __name__ == "__main__":
     main()

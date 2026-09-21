@@ -9,7 +9,7 @@ and hands them to the model in batches, replacing the fake torch.randn data
 '''
 
 class SO100Pairs(Dataset):
-    def __init__(self, h5_path, camera="pixels_top"):
+    def __init__(self, h5_path, camera="pixels_top", gap=8):
         self.h5_path = h5_path
         self.camera = camera
         self.file = None
@@ -20,7 +20,9 @@ class SO100Pairs(Dataset):
         for e in np.unique(ep):
             rows = np.where(ep == e)[0]
             rows = rows[np.argsort(ts[rows])]
-            pairs.extend(zip(rows[:-1], rows[1:]))
+            # pairs.extend(zip(rows[:-1], rows[1:]))
+            if len(rows) > gap:
+                pairs.extend(zip(rows[:-gap], rows[gap:]))
         self.pairs = np.array(pairs)
         # self.valid = np.where(ep[:-1] == ep[1:][0])[0]
 
