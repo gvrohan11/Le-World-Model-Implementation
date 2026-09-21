@@ -26,9 +26,15 @@ Yn = (Y - Y.mean(0, keepdim=True)) / (Y.std(0, keepdim=True) + 1e-6)   # standar
 print("probing on", len(imgs), "frames")
 
 # three encoders to compare
+
+# LeWM (my model)
 lewm = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device)
 lewm.load_state_dict(torch.load(CKPT, map_location=device)["encoder"])
-rand = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device)
+
+# Random
+rand = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device) 
+
+# ResNet
 resnet = torchvision.models.resnet18(weights="IMAGENET1K_V1")
 resnet.fc = nn.Identity()
 resnet = resnet.to(device)

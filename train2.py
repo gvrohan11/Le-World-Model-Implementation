@@ -23,8 +23,8 @@ Training process:
 DATASET = "so100-data/svla_so100_pickplace.h5"
 BATCH = 62
 LR = 1e-4
-MAX_STEPS = 50000
-SIGREG_W = 1.0
+MAX_STEPS = 15000 # 50000
+SIGREG_W = 25.0 # 1.0
 LOG_EVERY = 50
 CKPT_EVERY = 1000
 CKPT_PATH = "lewm.pt"
