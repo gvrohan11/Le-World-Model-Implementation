@@ -24,10 +24,9 @@ with h5py.File(DATASET, "r") as f:
     episode_ids = f["episode_index"][idx]
 imgs = torch.from_numpy(imgs).permute(0, 3, 1, 2).float() / 255.0
 Y = torch.from_numpy(jpos).float()
-train_mean = Y[tr].mean(0, keepdim=True)
-train_std = Y[tr].std(0, keepdim=True).clamp_min(1e-6)
+
 # Yn = (Y - Y.mean(0, keepdim=True)) / (Y.std(0, keepdim=True) + 1e-6)   # standardize targets
-Yn = (Y - train_mean) / train_std
+
 print("probing on", len(imgs), "frames")
 
 # three encoders to compare
@@ -96,6 +95,10 @@ tr = torch.from_numpy(
 te = torch.from_numpy(
     np.where(np.isin(episode_ids, test_episodes))[0]
 ).long()
+
+train_mean = Y[tr].mean(0, keepdim=True)
+train_std = Y[tr].std(0, keepdim=True).clamp_min(1e-6)
+Yn = (Y - train_mean) / train_std
 
 recalibrate_bn(lewm, imgs[tr])
 
