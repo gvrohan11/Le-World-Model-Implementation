@@ -11,10 +11,10 @@ DATASET = "so100-data/svla_so100_pickplace.h5"
 BATCH = 62
 STEPS = 1000
 device = ""
-    if torch.cuda.is_available():
-        device = "cuda"
-    else:
-        device = "cpu"
+if torch.cuda.is_available():
+    device = "cuda"
+else:
+    device = "cpu"
 
 ds = SO100Pairs(DATASET, gap=1)
 loader = DataLoader(
