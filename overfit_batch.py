@@ -58,7 +58,7 @@ predictor = Predictor(dim=192, action_dim=6, hidden=512).to(device)
 # for parameter in encoder.parameters():
 #     parameter.requires_grad_(False)
 
-opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=1e-4) # WAS 1e-3
+# opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=1e-4) # WAS 1e-3
 
 opt = torch.optim.Adam([
     {
