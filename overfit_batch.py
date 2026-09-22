@@ -58,6 +58,8 @@ for step in range(1, STEPS + 1):
     loss.backward()
     opt.step()
     if step == 1 or step % 200 == 0:
+        with torch.no_grad():
+            z_std = z.std(dim=0)
         print(
             f"step {step:4d} | "
             f"pred {pred_loss.item():.6f} "
