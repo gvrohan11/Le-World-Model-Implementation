@@ -78,7 +78,7 @@ for step in range(1, STEPS + 1):
     z_all = encoder(frames)
     z, z_next = z_all.chunk(2, dim=0)
     z_hat = predictor(z, action)
-    pred_loss = nn.functional.mse_loss(z_hat, z_next.detach())
+    pred_loss = nn.functional.mse_loss(z_hat, z_next)
     reg_loss = 0.5 * (sigreg_loss(z) + sigreg_loss(z_next))
     loss = pred_loss + (0.1 * reg_loss)
     opt.zero_grad(set_to_none=True)
