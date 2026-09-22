@@ -42,7 +42,7 @@ with torch.no_grad():
     z, z_next = z_all.chunk(2, dim=0)
 
 for parameter in encoder.parameters():
-    parameter.requires_grad(False)
+    parameter.requires_grad_(False)
 
 # opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=1e-3)
 opt = torch.optim.Adam(predictor.parameters(), lr=1e-3)
