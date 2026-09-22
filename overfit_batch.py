@@ -34,26 +34,49 @@ action = action.to(device)
 encoder = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device)
 predictor = Predictor(dim=192, action_dim=6, hidden=512).to(device)
 
-opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=1e-3)
+encoder.train()
 
-for step in range(1, STEPS + 1):
+with torch.no_grad():
     frames = torch.cat([frame, next_frame], dim=0)
     z_all = encoder(frames)
     z, z_next = z_all.chunk(2, dim=0)
+
+for parameter in encoder.parameters():
+    parameter.requires_grad(False)
+
+# opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=1e-3)
+opt = torch.optim.Adam(predictor.parameters(), lr=1e-3)
+
+for step in range(1, 2001):
     z_hat = predictor(z, action)
     pred_loss = nn.functional.mse_loss(z_hat, z_next)
-    reg_loss = 0.5 * (sigreg_loss(z) + sigreg_loss(z_next))
-    loss = pred_loss + (0.1 * reg_loss)
     opt.zero_grad(set_to_none=True)
-    loss.backward()
+    pred_loss.backward()
     opt.step()
-    if step == 1 or step % 100 == 0:
-        with torch.no_grad():
-            std = z.std(dim=0)
+    if step == 1 or step % 200 == 0:
         print(
             f"step {step:4d} | "
-            f"total {loss.item():.4f} | "
-            f"pred {pred_loss.item():.6f} | "
-            f"sigreg {reg_loss.item():.4f} | "
-            f"std {std.mean().item():.4f}"
+            f"pred {pred_loss.item():.6f}"
         )
+
+# for step in range(1, STEPS + 1):
+#     frames = torch.cat([frame, next_frame], dim=0)
+#     z_all = encoder(frames)
+#     z, z_next = z_all.chunk(2, dim=0)
+#     z_hat = predictor(z, action)
+#     pred_loss = nn.functional.mse_loss(z_hat, z_next)
+#     reg_loss = 0.5 * (sigreg_loss(z) + sigreg_loss(z_next))
+#     loss = pred_loss + (0.1 * reg_loss)
+#     opt.zero_grad(set_to_none=True)
+#     loss.backward()
+#     opt.step()
+#     if step == 1 or step % 100 == 0:
+#         with torch.no_grad():
+#             std = z.std(dim=0)
+#         print(
+#             f"step {step:4d} | "
+#             f"total {loss.item():.4f} | "
+#             f"pred {pred_loss.item():.6f} | "
+#             f"sigreg {reg_loss.item():.4f} | "
+#             f"std {std.mean().item():.4f}"
+#         )
