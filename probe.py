@@ -17,13 +17,17 @@ else:
 
 with h5py.File(DATASET, "r") as f:
     N = f["joint_pos"].shape[0]
-    idx = np.sort(np.random.choice(N, size=min(N_SAMPLES, N), replace=False))
+    sample_rng = np.random.default_rng(0)
+    idx = np.sort(sample_rng.choice(N, size=min(N_SAMPLES, N), replace=False))
     imgs = f[f"observation/{CAMERA}"][idx]
     jpos = f["joint_pos"][idx]
     episode_ids = f["episode_index"][idx]
 imgs = torch.from_numpy(imgs).permute(0, 3, 1, 2).float() / 255.0
 Y = torch.from_numpy(jpos).float()
-Yn = (Y - Y.mean(0, keepdim=True)) / (Y.std(0, keepdim=True) + 1e-6)   # standardize targets
+train_mean = Y[tr].mean(0, keepdim=True)
+train_std = Y[tr].stf(0, keepdim=True).clamp_min(1e-6)
+# Yn = (Y - Y.mean(0, keepdim=True)) / (Y.std(0, keepdim=True) + 1e-6)   # standardize targets
+Yn = (Y - train_mean) / train_std
 print("probing on", len(imgs), "frames")
 
 # three encoders to compare
