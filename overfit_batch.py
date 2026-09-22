@@ -7,6 +7,20 @@ from models.encoder import Encoder
 from models.predictor import Predictor
 from losses.sigreg import sigreg_loss
 
+'''
+Diagnostic script
+Loads one fixed batch of 62 one-step transitions
+Repeatedly trains on that same batch
+Ideally, we want the prediction loss to be close to 0
+
+Core operations: concatenate curr and next frame
+encode that concatentation
+calculate the new curr and new next from that
+predict new next using Predictor
+calculate predicted loss by comparing z_hat with z_next
+'''
+
+
 DATASET = "so100-data/svla_so100_pickplace.h5"
 BATCH = 62
 STEPS = 2000 #1000
@@ -52,7 +66,7 @@ for step in range(1, STEPS + 1):
     z_all = encoder(frames)
     z, z_next = z_all.chunk(2, dim=0)
     z_hat = predictor(z, action)
-    pred_loss = nn.functional.mse_loss(z_hat, z_next)
+    pred_loss = nn.functional.mse_loss(z_hat, z_next.detach())
     loss = pred_loss
     opt.zero_grad(set_to_none=True)
     loss.backward()
