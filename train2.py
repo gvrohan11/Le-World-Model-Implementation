@@ -43,7 +43,18 @@ def main():
     ds = SO100Pairs(DATASET, gap=1)
     loader = DataLoader(ds, batch_size=BATCH, shuffle=True, num_workers=4, pin_memory=(device == "cuda"), drop_last=True)
     print(f"Training Pairs: {len(ds)}")
-    opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=LR)
+    # opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=LR)
+
+    opt = torch.optim.Adam([
+        {
+            "params": encoder.parameters(),
+            "lr": 1e-5
+        },
+        {
+            "params": predictor.parameters(),
+            "lr": 1e-3
+        }
+    ])
 
     start_time = time.time()
     print(f"Training started at {datetime.now().strftime('%H:%M:%S')}")
