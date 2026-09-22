@@ -25,7 +25,8 @@ class Encoder(nn.Module):
             dim_feedforward=dim * 4, 
             batch_first=True,
             norm_first=True,
-            activation="gelu"
+            activation="gelu",
+            dropout=0.0
         )
 
         self.transformer = nn.TransformerEncoder(layer, num_layers=depth)
