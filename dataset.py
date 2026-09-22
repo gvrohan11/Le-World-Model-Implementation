@@ -16,6 +16,9 @@ class SO100Pairs(Dataset):
         with h5py.File(h5_path, "r") as f:
             ep = f["episode_index"][:]
             ts = f["timestep"][:]
+            all_actions = f["action"][:]
+        self.action_mean = torch.from_numpy(all_actions.mean(0)).float()
+        self.action_std = torch.from_numpy(all_actions.std(0)).float()
         pairs = []
         for e in np.unique(ep):
             rows = np.where(ep == e)[0]
@@ -39,10 +42,11 @@ class SO100Pairs(Dataset):
         f = self._f()
         img_t = f["observation"][self.camera][t]
         img_t1 = f["observation"][self.camera][t1]
-        action = f["action"][t]
+        action = torch.from_numpy(f["action"][t]).float()
+        action = (action - self.action_mean) / (self.action_std + 1e-6)
         frame = torch.from_numpy(img_t).permute(2,0,1).float() / 255.0
         next_frame = torch.from_numpy(img_t1).permute(2,0,1).float() / 255.0
-        return frame, next_frame, torch.from_numpy(action).float()
+        return frame, next_frame, action
 
 if __name__ == "__main__":
     from torch.utils.data import DataLoader

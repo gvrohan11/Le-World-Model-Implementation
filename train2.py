@@ -24,7 +24,7 @@ DATASET = "so100-data/svla_so100_pickplace.h5"
 BATCH = 62
 LR = 1e-4
 MAX_STEPS = 15000 # 50000
-SIGREG_W = 25.0 # 1.0
+SIGREG_W = 0.1 # 1.0
 LOG_EVERY = 50
 CKPT_EVERY = 1000
 CKPT_PATH = "lewm.pt"
@@ -40,7 +40,7 @@ def main():
     encoder = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device)
     predictor = Predictor(dim=192, action_dim=6, hidden=512).to(device)
 
-    ds = SO100Pairs(DATASET)
+    ds = SO100Pairs(DATASET, gap=1)
     loader = DataLoader(ds, batch_size=BATCH, shuffle=True, num_workers=4, pin_memory=(device == "cuda"), drop_last=True)
     print(f"Training Pairs: {len(ds)}")
     opt = torch.optim.Adam(list(encoder.parameters()) + list(predictor.parameters()), lr=LR)
@@ -54,13 +54,28 @@ def main():
             frame = frame.to(device, non_blocking=True)
             next_frame = next_frame.to(device, non_blocking=True)
             action = action.to(device, non_blocking=True)
-            z = encoder(frame)
-            z_next = encoder(next_frame)
-            z_hat = predictor(z, action) # predict next embedding from z
+            # z = encoder(frame)
+            # z_next = encoder(next_frame)
+            # z_hat = predictor(z, action) # predict next embedding from z
+
+            frames = torch.cat([frame, next_frame], dim=0)
+            z_all = encoder(frames)
+            z, z_next = z_all.chunk(2, dim=0)
+            if step % LOG_EVERY == 0:
+                with torch.no_grad():
+                    z_std = z.std(dim=0)
+                    print(
+                        f"embedding std | mean {z_std.mean().item():.4f} "
+                        f"min {z_std.min().item():.4f}"
+                        f"max {z_std.max().item():.4f}"
+                    )
+            z_hat = predictor(z, action)
 
             pred_loss = nn.functional.mse_loss(z_hat, z_next)
-            reg_loss = sigreg_loss(z)
+            reg_loss = 0.5 * (sigreg_loss(z) + sigreg_loss(z_next))
+            # reg_loss = sigreg_loss(z)
             loss = pred_loss + (SIGREG_W * reg_loss)
+
             opt.zero_grad()
             loss.backward()
             opt.step()

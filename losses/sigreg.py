@@ -5,7 +5,7 @@ SigReg: regularizes the encoder's embeddings to so they actually produce informa
 Projects embeddings onto random directions
 '''
 
-def sigreg_loss(Z, n_directions=128, t_max=5.0, n_knots=33):
+def sigreg_loss(Z, n_directions=1024, t_min=0.2, t_max = 4.0, n_knots=32):
     B, D = Z.shape
 
     V = torch.randn(D, n_directions, device=Z.device)
@@ -14,7 +14,8 @@ def sigreg_loss(Z, n_directions=128, t_max=5.0, n_knots=33):
 
     P = Z @ V
 
-    t = torch.linspace(-t_max, t_max, n_knots, device = Z.device)
+    t = torch.linspace(t_min, t_max, n_knots, device=Z.device)
+    # t = torch.linspace(-t_max, t_max, n_knots, device = Z.device)
 
     tP = t[:, None, None] * P[None, : , :]
     Re = torch.cos(tP).mean(dim=1)
