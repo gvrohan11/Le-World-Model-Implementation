@@ -20,6 +20,7 @@ with h5py.File(DATASET, "r") as f:
     idx = np.sort(np.random.choice(N, size=min(N_SAMPLES, N), replace=False))
     imgs = f[f"observation/{CAMERA}"][idx]
     jpos = f["joint_pos"][idx]
+    episode_ids = f["episode_index"][idx]
 imgs = torch.from_numpy(imgs).permute(0, 3, 1, 2).float() / 255.0
 Y = torch.from_numpy(jpos).float()
 Yn = (Y - Y.mean(0, keepdim=True)) / (Y.std(0, keepdim=True) + 1e-6)   # standardize targets
@@ -47,7 +48,7 @@ def recalibrate_bn(enc, X, bs=64):
     bn.momentum = old_momentum
     enc.eval()
 
-recalibrate_bn(lewm, imgs)
+# recalibrate_bn(lewm, imgs)
 
 # Random
 rand = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device) 
@@ -70,10 +71,29 @@ def embed(enc, X, norm=False, bs=64):
         outs.append(enc(b.to(device)).cpu())
     return torch.cat(outs)
 
-g = torch.Generator().manual_seed(0)               # same split for all three (fair)
-perm = torch.randperm(len(Yn), generator=g)
-cut = int(0.8 * len(Yn))
-tr, te = perm[:cut], perm[cut:]
+# g = torch.Generator().manual_seed(0)               # same split for all three (fair)
+# perm = torch.randperm(len(Yn), generator=g)
+# cut = int(0.8 * len(Yn))
+# tr, te = perm[:cut], perm[cut:]
+
+rng = np.random.default_rng(0)
+
+episodes = np.unique(episode_ids)
+rng.shuffle(episodes)
+
+cut = int(0.8 * len(episodes))
+train_episodes = episodes[:cut]
+test_episodes = episodes[cut:]
+
+tr = torch.from_numpy(
+    np.where(np.isin(episode_ids, train_episodes))[0]
+).long()
+
+te = torch.from_numpy(
+    np.where(np.isin(episode_ids, test_episodes))[0]
+).long()
+
+recalibrate_bn(lewm, imgs[tr])
 
 def probe(Z):
     p = nn.Linear(Z.shape[1], Yn.shape[1]); opt = torch.optim.Adam(p.parameters(), lr=1e-2)
