@@ -31,6 +31,24 @@ print("probing on", len(imgs), "frames")
 lewm = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device)
 lewm.load_state_dict(torch.load(CKPT, map_location=device)["encoder"])
 
+@torch.no_grad()
+def recalibrate_bn(enc, X, bs=64):
+    enc.train()
+
+    bn = enc.proj_bn
+    old_momentum = bn.momentum
+
+    bn.reset_running_stats()
+    bn.momentum = None
+
+    for i in range(0, len(X), bs):
+        enc(X[i:i + bs].to(device))
+
+    bn.momentum = old_momentum
+    enc.eval()
+
+recalibrate_bn(lewm, imgs)
+
 # Random
 rand = Encoder(img_size=224, patch=16, in_ch=3, dim=192, depth=12, heads=3).to(device) 
 

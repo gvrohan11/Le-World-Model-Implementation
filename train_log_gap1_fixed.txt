@@ -1,0 +1,623 @@
+Device: cuda
+/usr/local/lib/python3.12/dist-packages/torch/nn/modules/transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+Training Pairs: 6509
+Training started at 00:15:25
+embedding std | mean 0.9860 min 0.7598 max 1.1835
+[00:15:30] step     50 | total 0.9870 | pred 0.986153 | sigreg 0.0084
+embedding std | mean 1.0096 min 0.8296 max 1.1698
+[00:15:34] step    100 | total 0.9873 | pred 0.986623 | sigreg 0.0073
+embedding std | mean 1.0034 min 0.8600 max 1.1671
+[00:15:38] step    150 | total 1.0273 | pred 1.026504 | sigreg 0.0076
+embedding std | mean 1.0021 min 0.8379 max 1.1583
+[00:15:42] step    200 | total 1.0093 | pred 1.008538 | sigreg 0.0081
+embedding std | mean 0.9988 min 0.7582 max 1.1042
+[00:15:46] step    250 | total 1.0037 | pred 1.002956 | sigreg 0.0075
+embedding std | mean 1.0014 min 0.8354 max 1.1641
+[00:15:50] step    300 | total 0.9697 | pred 0.969020 | sigreg 0.0073
+embedding std | mean 0.9949 min 0.8162 max 1.1576
+[00:15:54] step    350 | total 0.9950 | pred 0.994203 | sigreg 0.0078
+embedding std | mean 1.0096 min 0.8039 max 1.1775
+[00:15:58] step    400 | total 0.9791 | pred 0.978319 | sigreg 0.0078
+embedding std | mean 0.9871 min 0.7449 max 1.1346
+[00:16:02] step    450 | total 1.0141 | pred 1.013241 | sigreg 0.0082
+embedding std | mean 0.9998 min 0.8300 max 1.1638
+[00:16:05] step    500 | total 0.9698 | pred 0.969048 | sigreg 0.0078
+embedding std | mean 1.0162 min 0.8229 max 1.1780
+[00:16:10] step    550 | total 0.9911 | pred 0.990317 | sigreg 0.0077
+embedding std | mean 0.9970 min 0.7916 max 1.1463
+[00:16:13] step    600 | total 1.0000 | pred 0.999311 | sigreg 0.0072
+embedding std | mean 1.0040 min 0.8275 max 1.2194
+[00:16:17] step    650 | total 1.0303 | pred 1.029435 | sigreg 0.0088
+embedding std | mean 0.9948 min 0.8469 max 1.1528
+[00:16:21] step    700 | total 1.0062 | pred 1.005390 | sigreg 0.0079
+embedding std | mean 0.9927 min 0.8072 max 1.1382
+[00:16:25] step    750 | total 0.9932 | pred 0.992456 | sigreg 0.0075
+embedding std | mean 1.0115 min 0.8473 max 1.1533
+[00:16:29] step    800 | total 1.0295 | pred 1.028738 | sigreg 0.0076
+embedding std | mean 0.9942 min 0.8035 max 1.1581
+[00:16:33] step    850 | total 1.0069 | pred 1.006131 | sigreg 0.0075
+embedding std | mean 0.9972 min 0.8293 max 1.1703
+[00:16:37] step    900 | total 1.0011 | pred 1.000333 | sigreg 0.0077
+embedding std | mean 1.0044 min 0.8472 max 1.1656
+[00:16:41] step    950 | total 0.9967 | pred 0.995975 | sigreg 0.0076
+embedding std | mean 1.0016 min 0.8356 max 1.1488
+[00:16:45] step   1000 | total 1.0317 | pred 1.030927 | sigreg 0.0079
+  [00:16:45] [checkpoint saved at step 1000]
+embedding std | mean 0.9888 min 0.8034 max 1.1315
+[00:16:49] step   1050 | total 0.9867 | pred 0.985903 | sigreg 0.0083
+embedding std | mean 1.0100 min 0.8220 max 1.1530
+[00:16:53] step   1100 | total 0.9906 | pred 0.989624 | sigreg 0.0101
+embedding std | mean 1.0058 min 0.7862 max 1.2004
+[00:16:57] step   1150 | total 0.9657 | pred 0.964746 | sigreg 0.0091
+embedding std | mean 1.0336 min 0.8649 max 1.2149
+[00:17:01] step   1200 | total 0.9171 | pred 0.916125 | sigreg 0.0102
+embedding std | mean 1.0195 min 0.8714 max 1.1608
+[00:17:05] step   1250 | total 0.9996 | pred 0.998786 | sigreg 0.0085
+embedding std | mean 1.0024 min 0.8137 max 1.1472
+[00:17:08] step   1300 | total 1.0482 | pred 1.047363 | sigreg 0.0087
+embedding std | mean 1.0157 min 0.8760 max 1.1695
+[00:17:12] step   1350 | total 1.0289 | pred 1.028060 | sigreg 0.0080
+embedding std | mean 1.0001 min 0.8049 max 1.1777
+[00:17:16] step   1400 | total 1.0067 | pred 1.005907 | sigreg 0.0082
+embedding std | mean 1.0072 min 0.8265 max 1.1769
+[00:17:20] step   1450 | total 1.0452 | pred 1.044311 | sigreg 0.0093
+embedding std | mean 1.0106 min 0.8452 max 1.2371
+[00:17:24] step   1500 | total 0.9763 | pred 0.975481 | sigreg 0.0087
+embedding std | mean 0.9853 min 0.8282 max 1.1546
+[00:17:28] step   1550 | total 1.0047 | pred 1.003823 | sigreg 0.0083
+embedding std | mean 0.9858 min 0.7730 max 1.1347
+[00:17:32] step   1600 | total 1.0129 | pred 1.012075 | sigreg 0.0086
+embedding std | mean 0.9936 min 0.7862 max 1.1258
+[00:17:36] step   1650 | total 1.0077 | pred 1.006838 | sigreg 0.0082
+embedding std | mean 1.0239 min 0.8438 max 1.1634
+[00:17:40] step   1700 | total 0.9955 | pred 0.994716 | sigreg 0.0076
+embedding std | mean 1.0014 min 0.8288 max 1.1716
+[00:17:43] step   1750 | total 0.9400 | pred 0.939084 | sigreg 0.0087
+embedding std | mean 0.9854 min 0.7702 max 1.1501
+[00:17:47] step   1800 | total 0.9857 | pred 0.984963 | sigreg 0.0077
+embedding std | mean 1.0135 min 0.7403 max 1.1768
+[00:17:51] step   1850 | total 1.0096 | pred 1.008842 | sigreg 0.0071
+embedding std | mean 0.9979 min 0.8319 max 1.1825
+[00:17:55] step   1900 | total 0.9966 | pred 0.995748 | sigreg 0.0083
+embedding std | mean 1.0060 min 0.8109 max 1.1633
+[00:17:59] step   1950 | total 1.0162 | pred 1.015402 | sigreg 0.0081
+embedding std | mean 1.0068 min 0.8034 max 1.1485
+[00:18:03] step   2000 | total 1.0092 | pred 1.008452 | sigreg 0.0075
+  [00:18:03] [checkpoint saved at step 2000]
+embedding std | mean 0.9994 min 0.7795 max 1.1430
+[00:18:07] step   2050 | total 1.0149 | pred 1.014126 | sigreg 0.0076
+embedding std | mean 0.9874 min 0.7891 max 1.1431
+[00:18:11] step   2100 | total 1.0000 | pred 0.999238 | sigreg 0.0074
+embedding std | mean 0.9997 min 0.8389 max 1.1629
+[00:18:15] step   2150 | total 1.0009 | pred 1.000188 | sigreg 0.0074
+embedding std | mean 0.9958 min 0.7963 max 1.1550
+[00:18:19] step   2200 | total 0.9812 | pred 0.980359 | sigreg 0.0082
+embedding std | mean 0.9982 min 0.8117 max 1.1474
+[00:18:23] step   2250 | total 1.0181 | pred 1.017325 | sigreg 0.0080
+embedding std | mean 1.0106 min 0.8354 max 1.1817
+[00:18:27] step   2300 | total 1.0104 | pred 1.009563 | sigreg 0.0079
+embedding std | mean 1.0145 min 0.8482 max 1.1499
+[00:18:31] step   2350 | total 1.0225 | pred 1.021740 | sigreg 0.0076
+embedding std | mean 1.0078 min 0.8780 max 1.1713
+[00:18:35] step   2400 | total 1.0356 | pred 1.034813 | sigreg 0.0079
+embedding std | mean 1.0067 min 0.8523 max 1.1806
+[00:18:39] step   2450 | total 0.9881 | pred 0.987255 | sigreg 0.0081
+embedding std | mean 0.9816 min 0.7974 max 1.1591
+[00:18:43] step   2500 | total 0.9916 | pred 0.990879 | sigreg 0.0075
+embedding std | mean 0.9985 min 0.8133 max 1.1639
+[00:18:46] step   2550 | total 0.9857 | pred 0.985005 | sigreg 0.0073
+embedding std | mean 0.9971 min 0.8127 max 1.2049
+[00:18:50] step   2600 | total 1.0300 | pred 1.029266 | sigreg 0.0075
+embedding std | mean 1.0045 min 0.7939 max 1.1716
+[00:18:54] step   2650 | total 1.0065 | pred 1.005819 | sigreg 0.0072
+embedding std | mean 1.0063 min 0.7737 max 1.1369
+[00:18:58] step   2700 | total 0.9907 | pred 0.989922 | sigreg 0.0076
+embedding std | mean 1.0027 min 0.7819 max 1.2019
+[00:19:02] step   2750 | total 1.0014 | pred 1.000737 | sigreg 0.0070
+embedding std | mean 1.0025 min 0.8564 max 1.1759
+[00:19:06] step   2800 | total 1.0209 | pred 1.020132 | sigreg 0.0075
+embedding std | mean 0.9994 min 0.8162 max 1.1512
+[00:19:10] step   2850 | total 0.9982 | pred 0.997464 | sigreg 0.0074
+embedding std | mean 1.0157 min 0.8433 max 1.1707
+[00:19:14] step   2900 | total 1.0181 | pred 1.017374 | sigreg 0.0076
+embedding std | mean 1.0032 min 0.7926 max 1.1588
+[00:19:18] step   2950 | total 0.9909 | pred 0.990135 | sigreg 0.0073
+embedding std | mean 1.0072 min 0.8258 max 1.1573
+[00:19:22] step   3000 | total 0.9947 | pred 0.993902 | sigreg 0.0082
+  [00:19:22] [checkpoint saved at step 3000]
+embedding std | mean 0.9883 min 0.7675 max 1.1564
+[00:19:26] step   3050 | total 1.0224 | pred 1.021642 | sigreg 0.0079
+embedding std | mean 1.0034 min 0.8499 max 1.1241
+[00:19:30] step   3100 | total 1.0093 | pred 1.008533 | sigreg 0.0072
+embedding std | mean 0.9962 min 0.8294 max 1.1472
+[00:19:34] step   3150 | total 0.9567 | pred 0.955953 | sigreg 0.0074
+embedding std | mean 1.0044 min 0.8287 max 1.1863
+[00:19:37] step   3200 | total 1.0065 | pred 1.005724 | sigreg 0.0076
+embedding std | mean 1.0046 min 0.8260 max 1.1625
+[00:19:41] step   3250 | total 0.9881 | pred 0.987220 | sigreg 0.0087
+embedding std | mean 0.9814 min 0.8053 max 1.1375
+[00:19:45] step   3300 | total 0.9866 | pred 0.985788 | sigreg 0.0080
+embedding std | mean 1.0058 min 0.8527 max 1.1661
+[00:19:49] step   3350 | total 0.9737 | pred 0.972992 | sigreg 0.0073
+embedding std | mean 1.0010 min 0.8488 max 1.1991
+[00:19:53] step   3400 | total 1.0067 | pred 1.005909 | sigreg 0.0076
+embedding std | mean 1.0088 min 0.8089 max 1.1477
+[00:19:57] step   3450 | total 0.9927 | pred 0.991955 | sigreg 0.0077
+embedding std | mean 0.9996 min 0.8242 max 1.1987
+[00:20:01] step   3500 | total 0.9963 | pred 0.995516 | sigreg 0.0074
+embedding std | mean 1.0191 min 0.8509 max 1.2050
+[00:20:05] step   3550 | total 0.9934 | pred 0.992616 | sigreg 0.0079
+embedding std | mean 1.0030 min 0.8214 max 1.1437
+[00:20:09] step   3600 | total 1.0082 | pred 1.007487 | sigreg 0.0073
+embedding std | mean 0.9994 min 0.8188 max 1.2052
+[00:20:13] step   3650 | total 0.9971 | pred 0.996270 | sigreg 0.0078
+embedding std | mean 1.0143 min 0.7642 max 1.1440
+[00:20:17] step   3700 | total 1.0095 | pred 1.008777 | sigreg 0.0074
+embedding std | mean 0.9994 min 0.8338 max 1.1551
+[00:20:21] step   3750 | total 0.9611 | pred 0.960402 | sigreg 0.0072
+embedding std | mean 1.0090 min 0.7993 max 1.1712
+[00:20:25] step   3800 | total 1.0105 | pred 1.009774 | sigreg 0.0076
+embedding std | mean 0.9998 min 0.8329 max 1.1986
+[00:20:29] step   3850 | total 0.9974 | pred 0.996742 | sigreg 0.0069
+embedding std | mean 1.0076 min 0.8293 max 1.1466
+[00:20:33] step   3900 | total 1.0286 | pred 1.027833 | sigreg 0.0074
+embedding std | mean 1.0053 min 0.8087 max 1.1855
+[00:20:36] step   3950 | total 0.9742 | pred 0.973369 | sigreg 0.0079
+embedding std | mean 1.0160 min 0.8252 max 1.1801
+[00:20:40] step   4000 | total 0.9840 | pred 0.983148 | sigreg 0.0082
+  [00:20:41] [checkpoint saved at step 4000]
+embedding std | mean 1.0003 min 0.8290 max 1.1562
+[00:20:44] step   4050 | total 0.9933 | pred 0.992457 | sigreg 0.0080
+embedding std | mean 1.0078 min 0.7848 max 1.1712
+[00:20:48] step   4100 | total 0.9895 | pred 0.988757 | sigreg 0.0077
+embedding std | mean 1.0046 min 0.8100 max 1.1552
+[00:20:52] step   4150 | total 1.0047 | pred 1.003921 | sigreg 0.0079
+embedding std | mean 1.0116 min 0.8279 max 1.1759
+[00:20:56] step   4200 | total 0.9996 | pred 0.998810 | sigreg 0.0076
+embedding std | mean 0.9970 min 0.7761 max 1.1609
+[00:21:00] step   4250 | total 1.0090 | pred 1.008166 | sigreg 0.0079
+embedding std | mean 0.9985 min 0.7318 max 1.1528
+[00:21:04] step   4300 | total 1.0265 | pred 1.025692 | sigreg 0.0077
+embedding std | mean 1.0157 min 0.8641 max 1.1533
+[00:21:08] step   4350 | total 1.0076 | pred 1.006859 | sigreg 0.0070
+embedding std | mean 1.0106 min 0.8513 max 1.1726
+[00:21:12] step   4400 | total 1.0202 | pred 1.019395 | sigreg 0.0078
+embedding std | mean 0.9958 min 0.7966 max 1.1637
+[00:21:16] step   4450 | total 1.0243 | pred 1.023516 | sigreg 0.0076
+embedding std | mean 1.0103 min 0.8255 max 1.1826
+[00:21:20] step   4500 | total 1.0146 | pred 1.013929 | sigreg 0.0070
+embedding std | mean 1.0144 min 0.7792 max 1.1631
+[00:21:24] step   4550 | total 1.0233 | pred 1.022549 | sigreg 0.0077
+embedding std | mean 1.0051 min 0.8098 max 1.1700
+[00:21:28] step   4600 | total 0.9632 | pred 0.962415 | sigreg 0.0078
+embedding std | mean 1.0033 min 0.8205 max 1.1978
+[00:21:32] step   4650 | total 1.0191 | pred 1.018255 | sigreg 0.0081
+embedding std | mean 0.9958 min 0.8089 max 1.1439
+[00:21:36] step   4700 | total 1.0165 | pred 1.015803 | sigreg 0.0072
+embedding std | mean 0.9944 min 0.8040 max 1.1352
+[00:21:40] step   4750 | total 0.9684 | pred 0.967667 | sigreg 0.0078
+embedding std | mean 0.9922 min 0.7941 max 1.1545
+[00:21:44] step   4800 | total 0.9907 | pred 0.989958 | sigreg 0.0079
+embedding std | mean 1.0051 min 0.8318 max 1.1319
+[00:21:47] step   4850 | total 1.0099 | pred 1.009135 | sigreg 0.0081
+embedding std | mean 1.0044 min 0.8554 max 1.1947
+[00:21:52] step   4900 | total 1.0285 | pred 1.027739 | sigreg 0.0074
+embedding std | mean 0.9965 min 0.8096 max 1.1536
+[00:21:55] step   4950 | total 0.9848 | pred 0.984006 | sigreg 0.0080
+embedding std | mean 0.9999 min 0.8362 max 1.1350
+[00:21:59] step   5000 | total 1.0395 | pred 1.038711 | sigreg 0.0074
+  [00:22:00] [checkpoint saved at step 5000]
+embedding std | mean 0.9964 min 0.8099 max 1.1419
+[00:22:03] step   5050 | total 0.9829 | pred 0.982130 | sigreg 0.0081
+embedding std | mean 1.0079 min 0.8152 max 1.1568
+[00:22:07] step   5100 | total 1.0102 | pred 1.009441 | sigreg 0.0073
+embedding std | mean 0.9903 min 0.8201 max 1.1757
+[00:22:11] step   5150 | total 1.0034 | pred 1.002699 | sigreg 0.0073
+embedding std | mean 1.0023 min 0.8279 max 1.1714
+[00:22:15] step   5200 | total 0.9715 | pred 0.970742 | sigreg 0.0079
+embedding std | mean 1.0097 min 0.8055 max 1.1420
+[00:22:19] step   5250 | total 1.0074 | pred 1.006696 | sigreg 0.0073
+embedding std | mean 1.0051 min 0.8194 max 1.1497
+[00:22:23] step   5300 | total 0.9919 | pred 0.991056 | sigreg 0.0080
+embedding std | mean 1.0114 min 0.8359 max 1.1711
+[00:22:27] step   5350 | total 1.0042 | pred 1.003515 | sigreg 0.0072
+embedding std | mean 0.9947 min 0.8409 max 1.1944
+[00:22:31] step   5400 | total 1.0147 | pred 1.014033 | sigreg 0.0071
+embedding std | mean 0.9908 min 0.7297 max 1.1375
+[00:22:35] step   5450 | total 1.0130 | pred 1.012272 | sigreg 0.0074
+embedding std | mean 1.0138 min 0.8461 max 1.1764
+[00:22:39] step   5500 | total 0.9996 | pred 0.998815 | sigreg 0.0078
+embedding std | mean 0.9919 min 0.7799 max 1.1522
+[00:22:43] step   5550 | total 0.9870 | pred 0.986247 | sigreg 0.0079
+embedding std | mean 1.0046 min 0.8287 max 1.1335
+[00:22:47] step   5600 | total 1.0137 | pred 1.012970 | sigreg 0.0076
+embedding std | mean 1.0056 min 0.8199 max 1.1482
+[00:22:51] step   5650 | total 1.0087 | pred 1.008022 | sigreg 0.0071
+embedding std | mean 0.9930 min 0.8224 max 1.1366
+[00:22:54] step   5700 | total 0.9953 | pred 0.994569 | sigreg 0.0077
+embedding std | mean 0.9933 min 0.7873 max 1.1509
+[00:22:59] step   5750 | total 0.9942 | pred 0.993417 | sigreg 0.0082
+embedding std | mean 0.9928 min 0.8120 max 1.1564
+[00:23:02] step   5800 | total 0.9996 | pred 0.998835 | sigreg 0.0077
+embedding std | mean 1.0105 min 0.8619 max 1.1785
+[00:23:07] step   5850 | total 1.0149 | pred 1.014224 | sigreg 0.0068
+embedding std | mean 1.0081 min 0.7447 max 1.1529
+[00:23:10] step   5900 | total 1.0051 | pred 1.004394 | sigreg 0.0073
+embedding std | mean 1.0067 min 0.8284 max 1.1430
+[00:23:15] step   5950 | total 1.0277 | pred 1.026982 | sigreg 0.0072
+embedding std | mean 1.0089 min 0.8064 max 1.1526
+[00:23:18] step   6000 | total 1.0270 | pred 1.026234 | sigreg 0.0078
+  [00:23:18] [checkpoint saved at step 6000]
+embedding std | mean 1.0126 min 0.7831 max 1.1514
+[00:23:23] step   6050 | total 1.0114 | pred 1.010674 | sigreg 0.0075
+embedding std | mean 1.0009 min 0.7800 max 1.1569
+[00:23:26] step   6100 | total 0.9869 | pred 0.985987 | sigreg 0.0087
+embedding std | mean 1.0022 min 0.8334 max 1.1459
+[00:23:30] step   6150 | total 1.0486 | pred 1.047822 | sigreg 0.0075
+embedding std | mean 0.9869 min 0.8170 max 1.1535
+[00:23:34] step   6200 | total 1.0080 | pred 1.007321 | sigreg 0.0072
+embedding std | mean 0.9879 min 0.8194 max 1.1710
+[00:23:38] step   6250 | total 0.9899 | pred 0.989141 | sigreg 0.0075
+embedding std | mean 0.9942 min 0.8147 max 1.1385
+[00:23:42] step   6300 | total 1.0118 | pred 1.011077 | sigreg 0.0072
+embedding std | mean 1.0055 min 0.7637 max 1.1382
+[00:23:46] step   6350 | total 1.0013 | pred 1.000427 | sigreg 0.0083
+embedding std | mean 1.0050 min 0.7997 max 1.1525
+[00:23:50] step   6400 | total 1.0046 | pred 1.003845 | sigreg 0.0078
+embedding std | mean 0.9911 min 0.8215 max 1.1489
+[00:23:54] step   6450 | total 0.9873 | pred 0.986534 | sigreg 0.0073
+embedding std | mean 1.0074 min 0.8060 max 1.1486
+[00:23:58] step   6500 | total 1.0025 | pred 1.001715 | sigreg 0.0080
+embedding std | mean 0.9974 min 0.7808 max 1.2075
+[00:24:02] step   6550 | total 1.0126 | pred 1.011886 | sigreg 0.0067
+embedding std | mean 0.9950 min 0.7774 max 1.1988
+[00:24:06] step   6600 | total 0.9990 | pred 0.998267 | sigreg 0.0074
+embedding std | mean 0.9934 min 0.8097 max 1.1664
+[00:24:10] step   6650 | total 1.0115 | pred 1.010745 | sigreg 0.0074
+embedding std | mean 1.0053 min 0.7968 max 1.1265
+[00:24:14] step   6700 | total 0.9950 | pred 0.994254 | sigreg 0.0074
+embedding std | mean 1.0070 min 0.7974 max 1.1564
+[00:24:18] step   6750 | total 0.9971 | pred 0.996312 | sigreg 0.0075
+embedding std | mean 0.9926 min 0.7965 max 1.1499
+[00:24:22] step   6800 | total 0.9898 | pred 0.989006 | sigreg 0.0077
+embedding std | mean 0.9972 min 0.8248 max 1.1449
+[00:24:25] step   6850 | total 1.0110 | pred 1.010265 | sigreg 0.0076
+embedding std | mean 0.9996 min 0.8309 max 1.1523
+[00:24:30] step   6900 | total 0.9647 | pred 0.963962 | sigreg 0.0075
+embedding std | mean 0.9866 min 0.7675 max 1.1475
+[00:24:33] step   6950 | total 0.9861 | pred 0.985404 | sigreg 0.0074
+embedding std | mean 1.0013 min 0.8412 max 1.1726
+[00:24:37] step   7000 | total 1.0092 | pred 1.008343 | sigreg 0.0082
+  [00:24:38] [checkpoint saved at step 7000]
+embedding std | mean 1.0050 min 0.8008 max 1.1574
+[00:24:41] step   7050 | total 0.9828 | pred 0.982029 | sigreg 0.0079
+embedding std | mean 0.9793 min 0.7670 max 1.1787
+[00:24:46] step   7100 | total 1.0076 | pred 1.006902 | sigreg 0.0075
+embedding std | mean 0.9895 min 0.8057 max 1.1670
+[00:24:49] step   7150 | total 0.9879 | pred 0.987109 | sigreg 0.0075
+embedding std | mean 1.0015 min 0.7884 max 1.1693
+[00:24:53] step   7200 | total 0.9947 | pred 0.993913 | sigreg 0.0078
+embedding std | mean 1.0034 min 0.8201 max 1.1557
+[00:24:57] step   7250 | total 1.0168 | pred 1.015931 | sigreg 0.0086
+embedding std | mean 1.0070 min 0.8031 max 1.1632
+[00:25:01] step   7300 | total 0.9932 | pred 0.992383 | sigreg 0.0081
+embedding std | mean 0.9924 min 0.8501 max 1.1351
+[00:25:05] step   7350 | total 0.9798 | pred 0.979025 | sigreg 0.0077
+embedding std | mean 1.0040 min 0.8303 max 1.1816
+[00:25:09] step   7400 | total 0.9734 | pred 0.972569 | sigreg 0.0083
+embedding std | mean 0.9990 min 0.8239 max 1.1821
+[00:25:13] step   7450 | total 1.0012 | pred 1.000422 | sigreg 0.0073
+embedding std | mean 0.9853 min 0.8322 max 1.1622
+[00:25:17] step   7500 | total 0.9650 | pred 0.964267 | sigreg 0.0076
+embedding std | mean 0.9950 min 0.8412 max 1.1449
+[00:25:21] step   7550 | total 0.9999 | pred 0.999135 | sigreg 0.0073
+embedding std | mean 0.9774 min 0.7615 max 1.1372
+[00:25:25] step   7600 | total 1.0066 | pred 1.005825 | sigreg 0.0079
+embedding std | mean 0.9930 min 0.8217 max 1.1313
+[00:25:29] step   7650 | total 1.0071 | pred 1.006329 | sigreg 0.0074
+embedding std | mean 0.9855 min 0.8344 max 1.1508
+[00:25:33] step   7700 | total 0.9941 | pred 0.993373 | sigreg 0.0074
+embedding std | mean 0.9985 min 0.8168 max 1.1671
+[00:25:37] step   7750 | total 0.9714 | pred 0.970618 | sigreg 0.0076
+embedding std | mean 0.9929 min 0.8001 max 1.1362
+[00:25:40] step   7800 | total 1.0013 | pred 1.000553 | sigreg 0.0076
+embedding std | mean 1.0114 min 0.8090 max 1.2117
+[00:25:45] step   7850 | total 0.9890 | pred 0.988188 | sigreg 0.0080
+embedding std | mean 1.0047 min 0.8027 max 1.1286
+[00:25:48] step   7900 | total 0.9828 | pred 0.982075 | sigreg 0.0077
+embedding std | mean 0.9998 min 0.8206 max 1.1753
+[00:25:52] step   7950 | total 0.9895 | pred 0.988725 | sigreg 0.0079
+embedding std | mean 1.0111 min 0.7989 max 1.1748
+[00:25:56] step   8000 | total 1.0052 | pred 1.004464 | sigreg 0.0073
+  [00:25:56] [checkpoint saved at step 8000]
+embedding std | mean 0.9991 min 0.8602 max 1.1385
+[00:26:00] step   8050 | total 1.0214 | pred 1.020655 | sigreg 0.0075
+embedding std | mean 1.0132 min 0.8414 max 1.1633
+[00:26:04] step   8100 | total 1.0011 | pred 1.000387 | sigreg 0.0071
+embedding std | mean 1.0159 min 0.7874 max 1.1437
+[00:26:08] step   8150 | total 0.9711 | pred 0.970374 | sigreg 0.0074
+embedding std | mean 1.0085 min 0.8341 max 1.1724
+[00:26:12] step   8200 | total 1.0213 | pred 1.020474 | sigreg 0.0081
+embedding std | mean 0.9979 min 0.8036 max 1.1297
+[00:26:16] step   8250 | total 1.0243 | pred 1.023561 | sigreg 0.0071
+embedding std | mean 1.0099 min 0.8253 max 1.1776
+[00:26:20] step   8300 | total 0.9902 | pred 0.989396 | sigreg 0.0076
+embedding std | mean 1.0095 min 0.8625 max 1.1703
+[00:26:24] step   8350 | total 1.0099 | pred 1.009122 | sigreg 0.0077
+embedding std | mean 0.9918 min 0.6959 max 1.1541
+[00:26:28] step   8400 | total 1.0056 | pred 1.004872 | sigreg 0.0073
+embedding std | mean 1.0062 min 0.8197 max 1.1787
+[00:26:32] step   8450 | total 0.9948 | pred 0.994002 | sigreg 0.0076
+embedding std | mean 0.9952 min 0.8136 max 1.1825
+[00:26:36] step   8500 | total 1.0155 | pred 1.014792 | sigreg 0.0072
+embedding std | mean 0.9946 min 0.8099 max 1.1397
+[00:26:40] step   8550 | total 1.0083 | pred 1.007585 | sigreg 0.0070
+embedding std | mean 0.9913 min 0.7917 max 1.1789
+[00:26:44] step   8600 | total 0.9796 | pred 0.978844 | sigreg 0.0073
+embedding std | mean 0.9999 min 0.8089 max 1.1629
+[00:26:48] step   8650 | total 0.9761 | pred 0.975266 | sigreg 0.0080
+embedding std | mean 0.9955 min 0.8370 max 1.1730
+[00:26:51] step   8700 | total 0.9948 | pred 0.994038 | sigreg 0.0072
+embedding std | mean 0.9965 min 0.8653 max 1.1774
+[00:26:56] step   8750 | total 0.9845 | pred 0.983696 | sigreg 0.0079
+embedding std | mean 1.0096 min 0.8262 max 1.1862
+[00:26:59] step   8800 | total 0.9986 | pred 0.997878 | sigreg 0.0074
+embedding std | mean 1.0139 min 0.7980 max 1.1470
+[00:27:03] step   8850 | total 1.0296 | pred 1.028817 | sigreg 0.0077
+embedding std | mean 1.0037 min 0.7860 max 1.1789
+[00:27:07] step   8900 | total 0.9798 | pred 0.979069 | sigreg 0.0074
+embedding std | mean 1.0031 min 0.7845 max 1.1434
+[00:27:11] step   8950 | total 0.9857 | pred 0.984952 | sigreg 0.0073
+embedding std | mean 1.0082 min 0.8372 max 1.1314
+[00:27:15] step   9000 | total 0.9695 | pred 0.968690 | sigreg 0.0076
+  [00:27:15] [checkpoint saved at step 9000]
+embedding std | mean 0.9947 min 0.8052 max 1.1696
+[00:27:19] step   9050 | total 0.9901 | pred 0.989282 | sigreg 0.0077
+embedding std | mean 1.0052 min 0.8082 max 1.1671
+[00:27:23] step   9100 | total 1.0128 | pred 1.012048 | sigreg 0.0079
+embedding std | mean 1.0060 min 0.8381 max 1.1847
+[00:27:27] step   9150 | total 1.0209 | pred 1.020202 | sigreg 0.0069
+embedding std | mean 1.0138 min 0.8227 max 1.1929
+[00:27:31] step   9200 | total 1.0024 | pred 1.001626 | sigreg 0.0078
+embedding std | mean 1.0065 min 0.7883 max 1.1660
+[00:27:35] step   9250 | total 1.0028 | pred 1.002027 | sigreg 0.0078
+embedding std | mean 1.0021 min 0.8376 max 1.1741
+[00:27:39] step   9300 | total 1.0021 | pred 1.001310 | sigreg 0.0076
+embedding std | mean 1.0146 min 0.7105 max 1.1604
+[00:27:43] step   9350 | total 0.9888 | pred 0.988030 | sigreg 0.0074
+embedding std | mean 0.9892 min 0.8228 max 1.1206
+[00:27:47] step   9400 | total 0.9999 | pred 0.999133 | sigreg 0.0078
+embedding std | mean 0.9994 min 0.7989 max 1.2112
+[00:27:51] step   9450 | total 0.9860 | pred 0.985264 | sigreg 0.0079
+embedding std | mean 0.9930 min 0.7966 max 1.1734
+[00:27:55] step   9500 | total 0.9830 | pred 0.982291 | sigreg 0.0072
+embedding std | mean 1.0042 min 0.8400 max 1.1681
+[00:27:58] step   9550 | total 1.0019 | pred 1.001099 | sigreg 0.0075
+embedding std | mean 0.9909 min 0.7939 max 1.1457
+[00:28:03] step   9600 | total 1.0094 | pred 1.008576 | sigreg 0.0080
+embedding std | mean 1.0141 min 0.8444 max 1.1609
+[00:28:06] step   9650 | total 0.9884 | pred 0.987635 | sigreg 0.0072
+embedding std | mean 0.9909 min 0.8192 max 1.1740
+[00:28:11] step   9700 | total 1.0096 | pred 1.008918 | sigreg 0.0073
+embedding std | mean 0.9952 min 0.8141 max 1.1498
+[00:28:14] step   9750 | total 0.9932 | pred 0.992481 | sigreg 0.0074
+embedding std | mean 0.9987 min 0.8305 max 1.1945
+[00:28:18] step   9800 | total 1.0187 | pred 1.017955 | sigreg 0.0073
+embedding std | mean 0.9995 min 0.8452 max 1.1726
+[00:28:22] step   9850 | total 0.9925 | pred 0.991731 | sigreg 0.0073
+embedding std | mean 1.0009 min 0.8152 max 1.1537
+[00:28:26] step   9900 | total 0.9849 | pred 0.984232 | sigreg 0.0071
+embedding std | mean 1.0049 min 0.8453 max 1.1490
+[00:28:30] step   9950 | total 1.0150 | pred 1.014208 | sigreg 0.0077
+embedding std | mean 1.0075 min 0.8596 max 1.1997
+[00:28:34] step  10000 | total 0.9964 | pred 0.995602 | sigreg 0.0075
+  [00:28:34] [checkpoint saved at step 10000]
+embedding std | mean 1.0145 min 0.8119 max 1.1658
+[00:28:38] step  10050 | total 0.9702 | pred 0.969417 | sigreg 0.0075
+embedding std | mean 0.9824 min 0.8238 max 1.1418
+[00:28:42] step  10100 | total 0.9866 | pred 0.985895 | sigreg 0.0071
+embedding std | mean 1.0002 min 0.8147 max 1.1847
+[00:28:46] step  10150 | total 0.9974 | pred 0.996725 | sigreg 0.0070
+embedding std | mean 1.0079 min 0.8507 max 1.1561
+[00:28:50] step  10200 | total 1.0294 | pred 1.028626 | sigreg 0.0078
+embedding std | mean 1.0002 min 0.8506 max 1.1629
+[00:28:54] step  10250 | total 0.9825 | pred 0.981739 | sigreg 0.0075
+embedding std | mean 1.0070 min 0.8220 max 1.1918
+[00:28:58] step  10300 | total 1.0251 | pred 1.024368 | sigreg 0.0071
+embedding std | mean 1.0002 min 0.8478 max 1.2125
+[00:29:02] step  10350 | total 1.0281 | pred 1.027299 | sigreg 0.0082
+embedding std | mean 1.0016 min 0.7756 max 1.1925
+[00:29:06] step  10400 | total 1.0225 | pred 1.021765 | sigreg 0.0076
+embedding std | mean 1.0001 min 0.7949 max 1.1683
+[00:29:10] step  10450 | total 1.0011 | pred 1.000283 | sigreg 0.0077
+embedding std | mean 1.0027 min 0.7895 max 1.1509
+[00:29:14] step  10500 | total 0.9942 | pred 0.993536 | sigreg 0.0071
+embedding std | mean 0.9737 min 0.7983 max 1.0998
+[00:29:18] step  10550 | total 1.0217 | pred 1.020895 | sigreg 0.0083
+embedding std | mean 0.9973 min 0.8243 max 1.1792
+[00:29:22] step  10600 | total 1.0122 | pred 1.011442 | sigreg 0.0079
+embedding std | mean 1.0015 min 0.7994 max 1.1716
+[00:29:26] step  10650 | total 1.0091 | pred 1.008299 | sigreg 0.0079
+embedding std | mean 1.0058 min 0.8499 max 1.1860
+[00:29:29] step  10700 | total 1.0158 | pred 1.015045 | sigreg 0.0074
+embedding std | mean 1.0035 min 0.7576 max 1.2020
+[00:29:34] step  10750 | total 1.0169 | pred 1.016148 | sigreg 0.0075
+embedding std | mean 1.0005 min 0.8654 max 1.1284
+[00:29:37] step  10800 | total 0.9673 | pred 0.966531 | sigreg 0.0077
+embedding std | mean 1.0114 min 0.8051 max 1.1816
+[00:29:41] step  10850 | total 1.0060 | pred 1.005221 | sigreg 0.0074
+embedding std | mean 1.0041 min 0.8626 max 1.1716
+[00:29:45] step  10900 | total 1.0256 | pred 1.024841 | sigreg 0.0076
+embedding std | mean 1.0006 min 0.7952 max 1.1539
+[00:29:49] step  10950 | total 1.0262 | pred 1.025447 | sigreg 0.0075
+embedding std | mean 0.9805 min 0.7817 max 1.1210
+[00:29:53] step  11000 | total 0.9836 | pred 0.982748 | sigreg 0.0080
+  [00:29:53] [checkpoint saved at step 11000]
+embedding std | mean 1.0064 min 0.8192 max 1.1368
+[00:29:57] step  11050 | total 1.0283 | pred 1.027473 | sigreg 0.0078
+embedding std | mean 0.9911 min 0.8051 max 1.1849
+[00:30:01] step  11100 | total 1.0184 | pred 1.017586 | sigreg 0.0082
+embedding std | mean 0.9988 min 0.8275 max 1.1999
+[00:30:05] step  11150 | total 1.0042 | pred 1.003504 | sigreg 0.0074
+embedding std | mean 0.9849 min 0.8368 max 1.1741
+[00:30:09] step  11200 | total 0.9910 | pred 0.990313 | sigreg 0.0072
+embedding std | mean 0.9915 min 0.7881 max 1.1550
+[00:30:13] step  11250 | total 0.9906 | pred 0.989849 | sigreg 0.0079
+embedding std | mean 0.9950 min 0.8362 max 1.1397
+[00:30:17] step  11300 | total 1.0112 | pred 1.010354 | sigreg 0.0083
+embedding std | mean 0.9910 min 0.8132 max 1.1224
+[00:30:21] step  11350 | total 1.0268 | pred 1.026063 | sigreg 0.0073
+embedding std | mean 1.0113 min 0.8175 max 1.1740
+[00:30:25] step  11400 | total 0.9792 | pred 0.978389 | sigreg 0.0079
+embedding std | mean 1.0065 min 0.7900 max 1.1642
+[00:30:29] step  11450 | total 0.9899 | pred 0.989137 | sigreg 0.0074
+embedding std | mean 1.0043 min 0.8299 max 1.1846
+[00:30:33] step  11500 | total 0.9946 | pred 0.993832 | sigreg 0.0073
+embedding std | mean 0.9853 min 0.8178 max 1.1391
+[00:30:37] step  11550 | total 0.9799 | pred 0.979072 | sigreg 0.0082
+embedding std | mean 0.9976 min 0.8120 max 1.1749
+[00:30:41] step  11600 | total 0.9926 | pred 0.991828 | sigreg 0.0076
+embedding std | mean 1.0112 min 0.8525 max 1.1696
+[00:30:45] step  11650 | total 0.9919 | pred 0.991102 | sigreg 0.0082
+embedding std | mean 0.9909 min 0.7834 max 1.2012
+[00:30:49] step  11700 | total 0.9642 | pred 0.963462 | sigreg 0.0076
+embedding std | mean 1.0037 min 0.8452 max 1.1908
+[00:30:53] step  11750 | total 1.0130 | pred 1.012139 | sigreg 0.0088
+embedding std | mean 1.0160 min 0.8306 max 1.1786
+[00:30:57] step  11800 | total 1.0003 | pred 0.999564 | sigreg 0.0076
+embedding std | mean 1.0079 min 0.8175 max 1.2080
+[00:31:00] step  11850 | total 1.0385 | pred 1.037765 | sigreg 0.0078
+embedding std | mean 0.9928 min 0.8229 max 1.1931
+[00:31:05] step  11900 | total 0.9772 | pred 0.976453 | sigreg 0.0076
+embedding std | mean 0.9928 min 0.8246 max 1.1365
+[00:31:08] step  11950 | total 0.9572 | pred 0.956458 | sigreg 0.0078
+embedding std | mean 0.9899 min 0.7626 max 1.1527
+[00:31:13] step  12000 | total 1.0322 | pred 1.031463 | sigreg 0.0077
+  [00:31:13] [checkpoint saved at step 12000]
+embedding std | mean 1.0126 min 0.8169 max 1.2129
+[00:31:16] step  12050 | total 1.0271 | pred 1.026273 | sigreg 0.0087
+embedding std | mean 0.9921 min 0.7848 max 1.1625
+[00:31:21] step  12100 | total 1.0251 | pred 1.024274 | sigreg 0.0078
+embedding std | mean 0.9967 min 0.8518 max 1.1381
+[00:31:24] step  12150 | total 0.9806 | pred 0.979586 | sigreg 0.0097
+embedding std | mean 0.9978 min 0.8075 max 1.1750
+[00:31:29] step  12200 | total 0.9650 | pred 0.964159 | sigreg 0.0079
+embedding std | mean 1.0062 min 0.7880 max 1.1959
+[00:31:32] step  12250 | total 0.9923 | pred 0.991540 | sigreg 0.0078
+embedding std | mean 0.9988 min 0.8457 max 1.1992
+[00:31:37] step  12300 | total 0.9952 | pred 0.994484 | sigreg 0.0073
+embedding std | mean 0.9954 min 0.7981 max 1.1571
+[00:31:40] step  12350 | total 0.9222 | pred 0.921198 | sigreg 0.0102
+embedding std | mean 0.9933 min 0.7675 max 1.1488
+[00:31:44] step  12400 | total 0.9913 | pred 0.990426 | sigreg 0.0083
+embedding std | mean 0.9934 min 0.8105 max 1.1578
+[00:31:48] step  12450 | total 1.0042 | pred 1.003446 | sigreg 0.0076
+embedding std | mean 1.0139 min 0.8811 max 1.1467
+[00:31:52] step  12500 | total 0.9556 | pred 0.954848 | sigreg 0.0078
+embedding std | mean 1.0042 min 0.8304 max 1.1745
+[00:31:56] step  12550 | total 0.9606 | pred 0.959790 | sigreg 0.0076
+embedding std | mean 1.0046 min 0.8237 max 1.1897
+[00:32:00] step  12600 | total 1.0115 | pred 1.010651 | sigreg 0.0081
+embedding std | mean 0.9939 min 0.8427 max 1.1363
+[00:32:04] step  12650 | total 1.0129 | pred 1.012131 | sigreg 0.0080
+embedding std | mean 1.0210 min 0.8290 max 1.1429
+[00:32:08] step  12700 | total 1.0098 | pred 1.009037 | sigreg 0.0074
+embedding std | mean 0.9818 min 0.8226 max 1.1411
+[00:32:12] step  12750 | total 0.9966 | pred 0.995759 | sigreg 0.0081
+embedding std | mean 0.9924 min 0.8042 max 1.1549
+[00:32:16] step  12800 | total 0.9853 | pred 0.984562 | sigreg 0.0075
+embedding std | mean 0.9899 min 0.7456 max 1.1924
+[00:32:20] step  12850 | total 1.0088 | pred 1.007940 | sigreg 0.0083
+embedding std | mean 1.0034 min 0.8396 max 1.1583
+[00:32:24] step  12900 | total 0.9912 | pred 0.990419 | sigreg 0.0081
+embedding std | mean 1.0038 min 0.8323 max 1.1583
+[00:32:28] step  12950 | total 1.0258 | pred 1.025044 | sigreg 0.0080
+embedding std | mean 0.9848 min 0.8170 max 1.1613
+[00:32:31] step  13000 | total 0.9883 | pred 0.987445 | sigreg 0.0083
+  [00:32:32] [checkpoint saved at step 13000]
+embedding std | mean 0.9667 min 0.7785 max 1.1727
+[00:32:36] step  13050 | total 1.0162 | pred 1.015447 | sigreg 0.0075
+embedding std | mean 0.9922 min 0.7911 max 1.1326
+[00:32:40] step  13100 | total 1.0057 | pred 1.004919 | sigreg 0.0083
+embedding std | mean 1.0039 min 0.7928 max 1.1358
+[00:32:44] step  13150 | total 1.0012 | pred 1.000368 | sigreg 0.0085
+embedding std | mean 1.0042 min 0.8462 max 1.1742
+[00:32:47] step  13200 | total 0.9891 | pred 0.988244 | sigreg 0.0082
+embedding std | mean 1.0024 min 0.8075 max 1.1652
+[00:32:52] step  13250 | total 0.9637 | pred 0.962812 | sigreg 0.0086
+embedding std | mean 0.9974 min 0.7813 max 1.1347
+[00:32:55] step  13300 | total 1.0014 | pred 1.000571 | sigreg 0.0084
+embedding std | mean 1.0129 min 0.8209 max 1.1522
+[00:32:59] step  13350 | total 0.9537 | pred 0.952853 | sigreg 0.0082
+embedding std | mean 0.9860 min 0.8291 max 1.1918
+[00:33:03] step  13400 | total 0.9758 | pred 0.974985 | sigreg 0.0086
+embedding std | mean 0.9734 min 0.7716 max 1.2111
+[00:33:07] step  13450 | total 1.0063 | pred 1.005416 | sigreg 0.0091
+embedding std | mean 1.0019 min 0.8261 max 1.1713
+[00:33:11] step  13500 | total 1.0301 | pred 1.029315 | sigreg 0.0083
+embedding std | mean 0.9917 min 0.7793 max 1.1810
+[00:33:15] step  13550 | total 0.9768 | pred 0.975876 | sigreg 0.0088
+embedding std | mean 0.9980 min 0.8255 max 1.1640
+[00:33:19] step  13600 | total 0.9462 | pred 0.945232 | sigreg 0.0094
+embedding std | mean 1.0033 min 0.8376 max 1.1516
+[00:33:23] step  13650 | total 0.9731 | pred 0.972250 | sigreg 0.0083
+embedding std | mean 0.9923 min 0.8132 max 1.1657
+[00:33:27] step  13700 | total 1.0157 | pred 1.014856 | sigreg 0.0085
+embedding std | mean 1.0154 min 0.8214 max 1.1612
+[00:33:31] step  13750 | total 1.0402 | pred 1.039358 | sigreg 0.0084
+embedding std | mean 0.9988 min 0.7653 max 1.1758
+[00:33:35] step  13800 | total 1.0059 | pred 1.004954 | sigreg 0.0091
+embedding std | mean 1.0157 min 0.8307 max 1.1587
+[00:33:39] step  13850 | total 0.9630 | pred 0.962109 | sigreg 0.0086
+embedding std | mean 0.9940 min 0.8217 max 1.1452
+[00:33:43] step  13900 | total 1.0372 | pred 1.036469 | sigreg 0.0077
+embedding std | mean 0.9831 min 0.7700 max 1.1344
+[00:33:47] step  13950 | total 0.9937 | pred 0.992880 | sigreg 0.0083
+embedding std | mean 0.9843 min 0.7796 max 1.1694
+[00:33:51] step  14000 | total 0.9890 | pred 0.988239 | sigreg 0.0078
+  [00:33:51] [checkpoint saved at step 14000]
+embedding std | mean 0.9951 min 0.8044 max 1.1886
+[00:33:55] step  14050 | total 1.0349 | pred 1.034003 | sigreg 0.0087
+embedding std | mean 1.0084 min 0.8844 max 1.2231
+[00:33:59] step  14100 | total 1.0064 | pred 1.005585 | sigreg 0.0080
+embedding std | mean 1.0229 min 0.8452 max 1.1875
+[00:34:03] step  14150 | total 0.9890 | pred 0.988151 | sigreg 0.0085
+embedding std | mean 0.9817 min 0.8090 max 1.1633
+[00:34:07] step  14200 | total 1.0200 | pred 1.019178 | sigreg 0.0085
+embedding std | mean 1.0089 min 0.8696 max 1.1489
+[00:34:11] step  14250 | total 1.0005 | pred 0.999785 | sigreg 0.0075
+embedding std | mean 1.0119 min 0.8305 max 1.1420
+[00:34:15] step  14300 | total 0.9992 | pred 0.998430 | sigreg 0.0078
+embedding std | mean 0.9884 min 0.8279 max 1.1516
+[00:34:18] step  14350 | total 1.0085 | pred 1.007795 | sigreg 0.0073
+embedding std | mean 1.0090 min 0.8291 max 1.1546
+[00:34:23] step  14400 | total 1.0253 | pred 1.024487 | sigreg 0.0076
+embedding std | mean 1.0099 min 0.8175 max 1.1827
+[00:34:26] step  14450 | total 0.9829 | pred 0.982032 | sigreg 0.0084
+embedding std | mean 0.9993 min 0.8056 max 1.1523
+[00:34:31] step  14500 | total 1.0341 | pred 1.033324 | sigreg 0.0075
+embedding std | mean 0.9907 min 0.7868 max 1.1649
+[00:34:34] step  14550 | total 0.9814 | pred 0.980610 | sigreg 0.0078
+embedding std | mean 1.0067 min 0.8395 max 1.1631
+[00:34:38] step  14600 | total 1.0161 | pred 1.015289 | sigreg 0.0079
+embedding std | mean 1.0087 min 0.8323 max 1.1568
+[00:34:42] step  14650 | total 1.0205 | pred 1.019746 | sigreg 0.0077
+embedding std | mean 1.0029 min 0.8439 max 1.1462
+[00:34:46] step  14700 | total 1.0167 | pred 1.015981 | sigreg 0.0077
+embedding std | mean 0.9939 min 0.8181 max 1.1573
+[00:34:50] step  14750 | total 1.0012 | pred 1.000409 | sigreg 0.0074
+embedding std | mean 1.0024 min 0.8305 max 1.1469
+[00:34:54] step  14800 | total 1.0093 | pred 1.008433 | sigreg 0.0082
+embedding std | mean 0.9984 min 0.8536 max 1.1732
+[00:34:58] step  14850 | total 1.0269 | pred 1.026178 | sigreg 0.0077
+embedding std | mean 1.0003 min 0.8305 max 1.1728
+[00:35:02] step  14900 | total 0.9915 | pred 0.990761 | sigreg 0.0071
+embedding std | mean 0.9945 min 0.8184 max 1.1434
+[00:35:06] step  14950 | total 0.9916 | pred 0.990838 | sigreg 0.0074
+embedding std | mean 1.0034 min 0.8117 max 1.1666
+[00:35:10] step  15000 | total 1.0296 | pred 1.028822 | sigreg 0.0082
+  [00:35:10] [checkpoint saved at step 15000]
+training complete — final checkpoint saved to lewm.pt
+Training ended at 00:35:11
+Total training time: 1185.6 seconds  (19.8 minutes)

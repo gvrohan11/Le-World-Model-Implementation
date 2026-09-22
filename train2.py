@@ -66,7 +66,7 @@ def main():
                     z_std = z.std(dim=0)
                     print(
                         f"embedding std | mean {z_std.mean().item():.4f} "
-                        f"min {z_std.min().item():.4f}"
+                        f"min {z_std.min().item():.4f} "
                         f"max {z_std.max().item():.4f}"
                     )
             z_hat = predictor(z, action)
