@@ -3,7 +3,6 @@ import torch.nn as nn
 
 '''
 Predictor: this takes the current frame's embedding (from encoder) + action the robot took (from policy) and predicts the next frame's embedding
-This
 '''
 
 class Predictor(nn.Module):
