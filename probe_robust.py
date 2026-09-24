@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchvision
+import copy
 
 from models.encoder import Encoder
 
@@ -95,10 +96,16 @@ def split_episodes():
     n_train = int(TRAIN_FRACTION * len(episodes))
     n_val = int(VAL_FRACTION * len(episodes))
 
-    train_episodes = episodes[:n_train]
-    val_episodes = episodes[n_train : n_train + n_val]
-    test_episodes = episodes[n_train + n_val :]
-    return train_episodes, val_episodes, test_episodes
+    return (
+        episodes[:n_train],
+        episodes[n_train:n_train + n_val],
+        episodes[n_train + n_val:],
+    )
+
+    # train_episodes = episodes[:n_train]
+    # val_episodes = episodes[n_train : n_train + n_val]
+    # test_episodes = episodes[n_train + n_val :]
+    # return train_episodes, val_episodes, test_episodes
 
 
 def make_episode_split(seed):
@@ -108,11 +115,17 @@ def make_episode_split(seed):
     val_idx = np.flatnonzero(np.isin(episode_ids, val_episodes))
     test_idx = np.flatnonzero(np.isin(episode_ids, test_episodes))
 
-    return (
-        torch.from_numpy(train_idx).long(),
-        torch.from_numpy(val_idx).long(),
-        torch.from_numpy(test_idx).long(),
+    return tuple(
+        torch.from_numpy(idx).long()
+        for idx in (train_idx, val_idx, test_idx)
     )
+
+    # return (
+    #     torch.from_numpy(train_idx).long(),
+    #     torch.from_numpy(val_idx).long(),
+    #     torch.from_numpy(test_idx).long(),
+    # )
+
     # rng = np.random.default_rng(seed)
     # episodes = np.unique(episode_ids).copy()
     # rng.shuffle(episodes)
@@ -132,13 +145,16 @@ def normalize_features(features, train_idx):
 def fit_probe(features, train_idx, test_idx, train_targets, seed, kind):
     torch.manual_seed(seed)
     x_train = features[train_idx].to(DEVICE)
+    x_val = features[val_idx].to(DEVICE)
     x_test = features[test_idx].to(DEVICE)
+    
     y_train = train_targets[train_idx].to(DEVICE)
+    y_val = targets[val_idx].to(DEVICE)
     y_test = train_targets[test_idx].to(DEVICE)
 
     if kind == "linear":
         model = nn.Linear(features.shape[1], train_targets.shape[1]).to(DEVICE)
-        steps = LINEAR_STEPS
+        max_steps = LINEAR_STEPS
         lr = 1e-2
     else:
         model = nn.Sequential(
@@ -146,15 +162,37 @@ def fit_probe(features, train_idx, test_idx, train_targets, seed, kind):
             nn.ReLU(),
             nn.Linear(256, train_targets.shape[1]),
         ).to(DEVICE)
-        steps = MLP_STEPS
+        max_steps = MLP_STEPS
         lr = 1e-3
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    for _ in range(steps):
+    best_val_loss = float("inf")
+    best_state = copy.deepcopy(model.state_dict())
+    patience = 50
+    steps_without_improvement = 0
+
+    for _ in range(max_steps):
+        model.train()
         optimizer.zero_grad(set_to_none=True)
-        loss = nn.functional.mse_loss(model(x_train), y_train)
-        loss.backward()
+        train_loss = nn.functional.mse_loss(model(x_train), y_train)
+        train_loss.backward()
         optimizer.step()
+
+        model.eval()
+        with torch.no_grad():
+            val_loss = nn.functional.mse_loss(model(x_val), y_val).item()
+
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            best_state = copy.deepcopy(model.state_dict())
+            steps_without_improvement = 0
+        else:
+            steps_without_improvement += 1
+            if steps_without_improvement >= patience:
+                break
+
+    model.load_state_dict(best_state)
+    model.eval()
 
     with torch.no_grad():
         residual = nn.functional.mse_loss(model(x_test), y_test)
@@ -197,9 +235,12 @@ for split_seed in SPLIT_SEEDS:
     }
 
     print(
-        f"split {split_seed}: train episodes={len(torch.unique(torch.from_numpy(episode_ids[train_idx.numpy()])))}, "
-        f"test episodes={len(torch.unique(torch.from_numpy(episode_ids[test_idx.numpy()])))}, "
-        f"frames={len(train_idx)}/{len(test_idx)}"
+        f"split {split_seed}: "
+        f"episodes train/val/test="
+        f"{len(np.unique(episode_ids[train_idx.numpy()]))}/"
+        f"{len(np.unique(episode_ids[val_idx.numpy()]))}/"
+        f"{len(np.unique(episode_ids[test_idx.numpy()]))}; "
+        f"frames train/val/test={len(train_idx)}/{len(val_idx)}/{len(test_idx)}"
     )
 
     for name, features in features_by_model.items():
@@ -216,6 +257,7 @@ for split_seed in SPLIT_SEEDS:
                     fit_probe(
                         features,
                         train_idx,
+                        val_idx,
                         test_idx,
                         normalized_targets,
                         seed=probe_seed,
@@ -234,3 +276,6 @@ for name in ("LeWM", "Random", "ResNet18"):
         f"MLP R² {mlp.mean():.3f} ± {mlp.std(ddof=1):.3f} | "
         f"effective rank {rank.mean():.1f} ± {rank.std(ddof=1):.1f}"
     )
+
+
+f"effective rank {rank.mean():.1f}"
