@@ -142,14 +142,14 @@ def normalize_features(features, train_idx):
     ).clamp_min(1e-6)
     return (features - mean) / std
 
-def fit_probe(features, train_idx, test_idx, train_targets, seed, kind):
+def fit_probe(features, train_idx, val_idx, test_idx, train_targets, seed, kind):
     torch.manual_seed(seed)
     x_train = features[train_idx].to(DEVICE)
     x_val = features[val_idx].to(DEVICE)
     x_test = features[test_idx].to(DEVICE)
     
     y_train = train_targets[train_idx].to(DEVICE)
-    y_val = targets[val_idx].to(DEVICE)
+    y_val = train_targets[val_idx].to(DEVICE)
     y_test = train_targets[test_idx].to(DEVICE)
 
     if kind == "linear":
@@ -274,8 +274,5 @@ for name in ("LeWM", "Random", "ResNet18"):
     print(
         f"{name:9s}: linear R² {linear.mean():.3f} ± {linear.std(ddof=1):.3f} | "
         f"MLP R² {mlp.mean():.3f} ± {mlp.std(ddof=1):.3f} | "
-        f"effective rank {rank.mean():.1f} ± {rank.std(ddof=1):.1f}"
+        f"effective rank {rank.mean():.1f}"
     )
-
-
-f"effective rank {rank.mean():.1f}"
