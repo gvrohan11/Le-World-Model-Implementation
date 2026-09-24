@@ -24,11 +24,7 @@ DIM = 192
 
 def main():
     torch.manual_seed(0)
-    device = ""
-    if torch.cuda.is_available():
-        device = "cuda"
-    else:
-        device = "cpu"
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     dataset = SO100Sequences(DATASET, seq_len=SEQ_LEN)
     loader = DataLoader(

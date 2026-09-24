@@ -10,7 +10,7 @@ from models.encoder import Encoder
 
 
 DATASET = "so100-data/svla_so100_pickplace.h5"
-CKPT = "lewm.pt"
+CKPT = "lewm_seq.pt" # "lewm.pt"
 CAMERA = "pixels_top"
 SPLIT_SEEDS = (0, 1, 2, 3, 4)
 PROBE_SEEDS = (0, 1, 2)

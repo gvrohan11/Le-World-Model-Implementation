@@ -37,7 +37,7 @@ class _Attention(nn.Module):
         qkv = self.to_qkv(self.norm(x))
         qkv = qkv.view(batch, length, 3, self.heads, self.dim_head)
         q, k, v = qkv.permute(2, 0, 3, 1, 4).unbind(0)
-        attended = F.scaled_dot_product_attention(q, k, v, dropout_p = self.dropout if self.training else 0.0)
+        attended = F.scaled_dot_product_attention(q, k, v, dropout_p = self.dropout if self.training else 0.0, is_causal=True)
         attended = attended.transpose(1, 2).contiguous()
         attended = attended.view(batch, length, self.heads * self.dim_head)
         return self.to_out(attended)

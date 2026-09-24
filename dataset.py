@@ -48,7 +48,7 @@ class SO100Pairs(Dataset):
         next_frame = torch.from_numpy(img_t1).permute(2,0,1).float() / 255.0
         return frame, next_frame, action
 
-class SOS100Sequences(Dataset):
+class SO100Sequences(Dataset):
     def __init__(self, h5_path, seq_len=4, camera="pixels_top"):
         self.h5_path = h5_path
         self.seq_len = seq_len
@@ -60,7 +60,7 @@ class SOS100Sequences(Dataset):
             timesteps = f["timestep"][:]
             all_actions = f["action"][:]
 
-        self.action_mean = torch.from_numpy(all_actions.mean(acis=0)).float()
+        self.action_mean = torch.from_numpy(all_actions.mean(axis=0)).float()
         self.action_std = torch.from_numpy(all_actions.std(axis=0)).float()
 
         windows = []
@@ -72,6 +72,8 @@ class SOS100Sequences(Dataset):
                 window = rows[start : start + seq_len]
                 if np.all(np.diff(timesteps[window]) == 1):
                     windows.append(window)
+
+        self.windows = np.asarray(windows, dtype=np.int64)
 
     def __len__(self):
         return len(self.windows)
@@ -89,7 +91,7 @@ class SOS100Sequences(Dataset):
         frames_np = np.stack([frame_dataset[row] for row in rows])
 
         action_dataset = f["action"]
-        actions_np = np.stack([action_dataset[row] for row in rows])
+        actions_np = np.stack([action_dataset[row] for row in rows[:-1]])
 
         frames = torch.from_numpy(frames_np).permute(0, 3, 1, 2).float() / 255.0 # Why go in 0,3,1,2 order?
         actions = torch.from_numpy(actions_np).float()
