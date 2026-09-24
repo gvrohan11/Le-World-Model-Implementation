@@ -10,23 +10,33 @@ from losses.sigreg2 import sigreg_loss
 from models.encoder import Encoder
 from models.predictor2 import ActionEncoder, Predictor
 
+import h5py
+import numpy as np
+
 DATASET = "so100-data/svla_so100_pickplace.h5"
 BATCH = 32
 EPOCHS = 100
 SIGREG_W = 0.09
 LOG_EVERY = 100
 CKPT_EVERY_EPOCHS = 5
-CKPT_PATH = "lewm_seq.pt"
+CKPT_PATH = "lewm_seq_trainonly.pt" # "lewm_seq.pt"
 
 SEQ_LEN = 4
 HISTORY = SEQ_LEN - 1
 DIM = 192
 
+SPLIT_SEED = 0
+TRAIN_FRACTION = 0.7
+VAL_FRACTION = 0.1
+
 def main():
     torch.manual_seed(0)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    dataset = SO100Sequences(DATASET, seq_len=SEQ_LEN)
+    train_episodes, _, _ = split_episodes()
+    # dataset = SO100Sequences(DATASET, seq_len=SEQ_LEN)
+    dataset = SO100Sequences(DATASET, seq_len=SEQ_LEN, episodes=train_episodes)
+    
     loader = DataLoader(
         dataset,
         batch_size=BATCH,
@@ -122,6 +132,20 @@ def main():
 
     print(f"Training complete; final checkpoint: {CKPT_PATH}")
     print(f"Elapsed: {(time.time() - start) / 60:.1f} minutes")
+
+def split_episodes():
+    with h5py.File(DATASET, "r") as f:
+        episodes = np.unique(f["episode_index"][:])
+    rng = np.random.default_rng(SPLIT_SEED)
+    rng.shuffle(episodes)
+
+    n_train = int(TRAIN_FRACTION * len(episodes))
+    n_val = int(VAL_FRACTION * len(episodes))
+
+    train_episodes = episodes[:n_train]
+    val_episodes = episodes[n_train : n_train + n_val]
+    test_episodes = episodes[n_train + n_val :]
+    return train_episodes, val_episodes, test_episodes
 
 if __name__ == "__main__":
     main()

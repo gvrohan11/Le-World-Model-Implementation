@@ -10,14 +10,18 @@ from models.encoder import Encoder
 
 
 DATASET = "so100-data/svla_so100_pickplace.h5"
-CKPT = "lewm_seq.pt" # "lewm.pt"
+CKPT = "lewm_seq_trainonly.pt" # "lewm_seq.pt" # "lewm.pt"
 CAMERA = "pixels_top"
-SPLIT_SEEDS = (0, 1, 2, 3, 4)
+SPLIT_SEEDS = (0,) # (0, 1, 2, 3, 4)
 PROBE_SEEDS = (0, 1, 2)
 BATCH_SIZE = 64
 LINEAR_STEPS = 500
 MLP_STEPS = 800
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+SPLIT_SEED = 0
+TRAIN_FRACTION = 0.70
+VAL_FRACTION = 0.10
 
 
 with h5py.File(DATASET, "r") as f:
@@ -81,17 +85,49 @@ def embed(encoder, input_images, resnet_input=False):
         outputs.append(encoder(batch).cpu())
     return torch.cat(outputs)
 
+def split_episodes():
+    with h5py.File(DATASET, "r") as f:
+        episodes = np.unique(f["episode_index"][:])
+
+    rng = np.random.default_rng(SPLIT_SEED)
+    rng.shuffle(episodes)
+
+    n_train = int(TRAIN_FRACTION * len(episodes))
+    n_val = int(VAL_FRACTION * len(episodes))
+
+    train_episodes = episodes[:n_train]
+    val_episodes = episodes[n_train : n_train + n_val]
+    test_episodes = episodes[n_train + n_val :]
+    return train_episodes, val_episodes, test_episodes
+
 
 def make_episode_split(seed):
-    rng = np.random.default_rng(seed)
-    episodes = np.unique(episode_ids).copy()
-    rng.shuffle(episodes)
-    cut = int(0.8 * len(episodes))
-    train_episodes, test_episodes = episodes[:cut], episodes[cut:]
-    train_idx = np.flatnonzero(np.isin(episode_ids, train_episodes))
-    test_idx = np.flatnonzero(np.isin(episode_ids, test_episodes))
-    return torch.from_numpy(train_idx).long(), torch.from_numpy(test_idx).long()
+    train_episodes, val_episodes, test_episodes = split_episodes()
 
+    train_idx = np.flatnonzero(np.isin(episode_ids, train_episodes))
+    val_idx = np.flatnonzero(np.isin(episode_ids, val_episodes))
+    test_idx = np.flatnonzero(np.isin(episode_ids, test_episodes))
+
+    return (
+        torch.from_numpy(train_idx).long(),
+        torch.from_numpy(val_idx).long(),
+        torch.from_numpy(test_idx).long(),
+    )
+    # rng = np.random.default_rng(seed)
+    # episodes = np.unique(episode_ids).copy()
+    # rng.shuffle(episodes)
+    # cut = int(0.8 * len(episodes))
+    # train_episodes, test_episodes = episodes[:cut], episodes[cut:]
+    # train_idx = np.flatnonzero(np.isin(episode_ids, train_episodes))
+    # test_idx = np.flatnonzero(np.isin(episode_ids, test_episodes))
+    # return torch.from_numpy(train_idx).long(), torch.from_numpy(test_idx).long()
+
+def normalize_features(features, train_idx):
+    mean = features[train_idx].mean(dim=0, keepdim=True)
+    std = features[train_idx].std(
+        dim=0, unbiased=False, keepdim=True
+    ).clamp_min(1e-6)
+    return (features - mean) / std
 
 def fit_probe(features, train_idx, test_idx, train_targets, seed, kind):
     torch.manual_seed(seed)
@@ -144,7 +180,7 @@ scores = {
 rank_scores = {"LeWM": [], "Random": [], "ResNet18": []}
 
 for split_seed in SPLIT_SEEDS:
-    train_idx, test_idx = make_episode_split(split_seed)
+    train_idx, val_idx, test_idx = make_episode_split(split_seed)
 
     train_mean = targets[train_idx].mean(0, keepdim=True)
     train_std = targets[train_idx].std(0, keepdim=True).clamp_min(1e-6)
@@ -167,7 +203,13 @@ for split_seed in SPLIT_SEEDS:
     )
 
     for name, features in features_by_model.items():
-        rank_scores[name].append(effective_rank(features))
+
+        raw_features = features_by_model[name]
+        rank_scores[name].append(effective_rank(raw_features))
+        features = normalize_features(raw_features, train_idx)
+
+
+        # rank_scores[name].append(effective_rank(features))
         for probe_seed in PROBE_SEEDS:
             for kind in ("linear", "mlp"):
                 scores[name][kind].append(

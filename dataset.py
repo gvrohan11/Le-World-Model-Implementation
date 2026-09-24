@@ -49,7 +49,7 @@ class SO100Pairs(Dataset):
         return frame, next_frame, action
 
 class SO100Sequences(Dataset):
-    def __init__(self, h5_path, seq_len=4, camera="pixels_top"):
+    def __init__(self, h5_path, seq_len=4, camera="pixels_top", episodes=None):
         self.h5_path = h5_path
         self.seq_len = seq_len
         self.camera = camera
@@ -60,11 +60,25 @@ class SO100Sequences(Dataset):
             timesteps = f["timestep"][:]
             all_actions = f["action"][:]
 
-        self.action_mean = torch.from_numpy(all_actions.mean(axis=0)).float()
-        self.action_std = torch.from_numpy(all_actions.std(axis=0)).float()
+        selected_episodes = (
+            None if episodes is None else {int(e) for e in episodes}
+        )
+
+        stats_mask = (
+            np.ones(len(episode_ids), dtype=bool)
+            if selected_episodes is None
+            else np.isin(episode_ids, list(selected_episodes))
+        )
+        actions_for_stats = all_actions[stats_mask]
+
+        self.action_mean = torch.from_numpy(actions_for_stats.mean(axis=0)).float()
+        self.action_std = torch.from_numpy(actions_for_stats.std(axis=0)).float()
 
         windows = []
         for episode in np.unique(episode_ids):
+            if selected_episodes is not None and int(episode) not in selected_episodes:
+                continue
+
             rows = np.flatnonzero(episode_ids == episode)
             rows = rows[np.argsort(timesteps[rows])]
 
