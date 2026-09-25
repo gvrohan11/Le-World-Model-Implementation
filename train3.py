@@ -140,6 +140,8 @@ def main():
             "action_encoder": action_encoder.state_dict(),
             "predictor": predictor.state_dict(),
             "optimizer": optimizer.state_dict(),
+            "projector": projector.state_dict(),
+            "pred_proj": pred_proj.state_dict(),
             "epoch": EPOCHS,
             "step": step,
         },
