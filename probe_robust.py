@@ -8,10 +8,12 @@ import torchvision
 import copy
 
 from models.encoder import Encoder
+from models.predictor2 import ProjectionHead
 
 
 DATASET = "so100-data/svla_so100_pickplace.h5"
-CKPT = "lewm_seq_trainonly.pt" # "lewm_seq.pt" # "lewm.pt"
+# "lewm_seq_trainonly.pt" # "lewm_seq.pt" # "lewm.pt"
+CKPT = "lewm_seq_projectors.pt" 
 CAMERA = "pixels_top"
 SPLIT_SEEDS = (0,) # (0, 1, 2, 3, 4)
 PROBE_SEEDS = (0, 1, 2)
@@ -24,6 +26,7 @@ SPLIT_SEED = 0
 TRAIN_FRACTION = 0.70
 VAL_FRACTION = 0.10
 
+DIM = 192
 
 with h5py.File(DATASET, "r") as f:
     images_np = f[f"observation/{CAMERA}"][:]
@@ -49,6 +52,9 @@ def make_encoder():
 
 lewm = make_encoder()
 checkpoint = torch.load(CKPT, map_location=DEVICE, weights_only=False)
+lewm_projector = ProjectionHead(DIM).to(DEVICE)
+lewm_projector.load_state_dict(checkpoint["projector"])
+lewm_projector.eval()
 lewm.load_state_dict(checkpoint["encoder"])
 random_encoder = make_encoder()
 
@@ -76,14 +82,21 @@ def recalibrate_bn(encoder, train_images):
 
 
 @torch.no_grad()
-def embed(encoder, input_images, resnet_input=False):
+def embed(encoder, input_images, resnet_input=False, projector=None):
     encoder.eval()
+    if projector is not None:
+        projector.eval()
+
     outputs = []
     for start in range(0, len(input_images), BATCH_SIZE):
         batch = input_images[start:start + BATCH_SIZE].to(DEVICE)
         if resnet_input:
             batch = (batch - imagenet_mean) / imagenet_std
-        outputs.append(encoder(batch).cpu())
+
+        features = encoder(batch)
+        if projector is not None:
+            features = projector(features)
+        outputs.append(features.cpu())
     return torch.cat(outputs)
 
 def split_episodes():
@@ -229,7 +242,7 @@ for split_seed in SPLIT_SEEDS:
     recalibrate_bn(random_encoder, train_images)
 
     features_by_model = {
-        "LeWM": embed(lewm, images),
+        "LeWM": embed(lewm, images, projector=lewm_projector),
         "Random": embed(random_encoder, images),
         "ResNet18": embed(resnet, images, resnet_input=True),
     }

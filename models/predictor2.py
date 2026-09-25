@@ -96,4 +96,19 @@ class Predictor(nn.Module):
         for block in self.blocks:
             x = block(x, action_embedding)
         return self.norm(x)
+
+class ProjectionHead(nn.Module):
+    def __init__(self, dim=192, hidden_dim=2048):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(dim, hidden_dim),
+            nn.BatchNorm1d(hidden_dim),
+            nn.GELU(),
+            nn.Linear(hidden_dim, dim)
+        )
+
+    def forward(self, x):
+        shape = x.shape
+        x = self.net(x.reshape(-1, shape[-1]))
+        return x.reshape(*shape[:-1], -1)
     

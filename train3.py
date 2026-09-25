@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from dataset import SO100Sequences
 from losses.sigreg2 import sigreg_loss
 from models.encoder import Encoder
-from models.predictor2 import ActionEncoder, Predictor
+from models.predictor2 import ActionEncoder, Predictor, ProjectionHead
 
 import h5py
 import numpy as np
@@ -51,10 +51,19 @@ def main():
     action_encoder = ActionEncoder(action_dim=6, dim=DIM).to(device)
     predictor = Predictor(dim=DIM, num_frames=HISTORY).to(device)
 
-    optimizer = torch.optim.AdamW(
+    projector = ProjectionHead(DIM).to(device)
+    pred_proj = ProjectionHead(DIM).to(device)
+
+    trainable_params = (
         list(encoder.parameters())
         + list(action_encoder.parameters())
-        + list(predictor.parameters()),
+        + list(predictor.parameters())
+        + list(projector.parameters())
+        + list(pred_proj.parameters())
+    )
+
+    optimizer = torch.optim.AdamW(
+        trainable_params,
         lr=5e-5,
         weight_decay=1e-3
     )
@@ -66,6 +75,8 @@ def main():
         encoder.train()
         action_encoder.train()
         predictor.train()
+        projector.train()
+        pred_proj.train()
 
         for frames, acitons in loader:
             frames = frames.to(device, non_blocking=True)
@@ -73,11 +84,16 @@ def main():
 
             batch_size, seq_len, channels, height, width = frames.shape
 
-            z = encoder(frames.reshape(batch_size * seq_len, channels, height, width)).reshape(batch_size, seq_len, DIM)
+            # z = encoder(frames.reshape(batch_size * seq_len, channels, height, width)).reshape(batch_size, seq_len, DIM)
+            z = encoder(frames.reshape(batch_size * seq_len, channels, height, width))
+            z = projector(z).reshape(batch_size, seq_len, DIM)
 
             action_embedding = action_encoder(acitons)
 
+            # z_hat = predictor(z[:, :-1], action_embedding)
+            # pred_loss = nn.functional.mse_loss(z_hat, z[:, 1:])
             z_hat = predictor(z[:, :-1], action_embedding)
+            z_hat = pred_proj(z_hat)
             pred_loss = nn.functional.mse_loss(z_hat, z[:, 1:])
             reg_loss = sigreg_loss(z)
             loss = pred_loss + (SIGREG_W * reg_loss)
@@ -85,9 +101,7 @@ def main():
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             torch.nn.utils.clip_grad_norm_(
-                list(encoder.parameters())
-                + list(action_encoder.parameters())
-                + list(predictor.parameters()),
+                trainable_params,
                 max_norm=1.0
             )
             optimizer.step()
@@ -110,8 +124,10 @@ def main():
                 {
                     "encoder": encoder.state_dict(),
                     "action_encoder": action_encoder.state_dict(),
-                    "predictor": predictor.state_dict(),
-                    "optimizer": optimizer.state_dict(),
+                    # "predictor": predictor.state_dict(),
+                    # "optimizer": optimizer.state_dict(),
+                    "projector": projector.state_dict(),
+                    "pred_proj": pred_proj.state_dict(),
                     "epoch": epoch,
                     "step": step,
                 },
