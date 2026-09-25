@@ -238,7 +238,7 @@ for split_seed in SPLIT_SEEDS:
     normalized_targets = (targets - train_mean) / train_std
 
     train_images = images[train_idx]
-    recalibrate_bn(lewm, train_images)
+    # recalibrate_bn(lewm, train_images)
     recalibrate_bn(random_encoder, train_images)
 
     features_by_model = {

@@ -19,7 +19,7 @@ EPOCHS = 100
 SIGREG_W = 0.09
 LOG_EVERY = 100
 CKPT_EVERY_EPOCHS = 5
-CKPT_PATH = "lewm_seq_trainonly.pt" # "lewm_seq.pt"
+CKPT_PATH = "lewm_seq_projectors.pt" # "lewm_seq.pt"
 
 SEQ_LEN = 4
 HISTORY = SEQ_LEN - 1
@@ -124,8 +124,8 @@ def main():
                 {
                     "encoder": encoder.state_dict(),
                     "action_encoder": action_encoder.state_dict(),
-                    # "predictor": predictor.state_dict(),
-                    # "optimizer": optimizer.state_dict(),
+                    "predictor": predictor.state_dict(),
+                    "optimizer": optimizer.state_dict(),
                     "projector": projector.state_dict(),
                     "pred_proj": pred_proj.state_dict(),
                     "epoch": epoch,
