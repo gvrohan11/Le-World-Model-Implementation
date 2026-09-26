@@ -13,7 +13,7 @@ from models.predictor2 import ActionEncoder, Predictor, ProjectionHead
 import h5py
 import numpy as np
 
-DATASET = "so100-data/svla_so100_pickplace.h5"
+DATASET = "so100-data/real_so101_extra.h5" # "so100-data/svla_so100_pickplace.h5"
 BATCH = 32
 EPOCHS = 100
 SIGREG_W = 0.09
@@ -35,7 +35,13 @@ def main():
 
     train_episodes, _, _ = split_episodes()
     # dataset = SO100Sequences(DATASET, seq_len=SEQ_LEN)
-    dataset = SO100Sequences(DATASET, seq_len=SEQ_LEN, episodes=train_episodes)
+    # dataset = SO100Sequences(DATASET, seq_len=SEQ_LEN, episodes=train_episodes)
+    dataset = SO100Sequences(
+        DATASET,
+        seq_len=SEQ_LEN,
+        episodes=train_episodes,
+        camera="pixels_front",
+    )
     
     loader = DataLoader(
         dataset,
