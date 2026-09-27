@@ -12,9 +12,12 @@ from models.predictor2 import ProjectionHead
 
 
 DATASET = "so100-data/svla_so100_pickplace.h5"
-# "lewm_seq_trainonly.pt" # "lewm_seq.pt" # "lewm.pt"
-CKPT = "lewm_seq_projectors.pt" 
-CAMERA = "pixels_top"
+# "lewm_seq_trainonly.pt" 
+# "lewm_seq.pt" 
+# "lewm.pt"
+# "lewm_seq_projectors.pt" 
+CKPT = "lewm_real_extra.pt"
+CAMERA = "pixels_front" # "pixels_top"
 SPLIT_SEEDS = (0,) # (0, 1, 2, 3, 4)
 PROBE_SEEDS = (0, 1, 2)
 BATCH_SIZE = 64
