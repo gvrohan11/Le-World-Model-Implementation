@@ -19,7 +19,7 @@ EPOCHS = 100
 SIGREG_W = 0.09
 LOG_EVERY = 100
 CKPT_EVERY_EPOCHS = 5
-CKPT_PATH = "lewm_seq_projectors.pt" # "lewm_seq.pt"
+CKPT_PATH = "lewm_real_extra.pt" # "lewm_seq_projectors.pt" # "lewm_seq.pt"
 
 SEQ_LEN = 4
 HISTORY = SEQ_LEN - 1
