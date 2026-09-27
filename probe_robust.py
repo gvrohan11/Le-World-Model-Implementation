@@ -11,7 +11,7 @@ from models.encoder import Encoder
 from models.predictor2 import ProjectionHead
 
 
-DATASET = "so100-data/svla_so100_pickplace.h5"
+DATASET = "so100-data/real_so101_extra.h5" # "so100-data/svla_so100_pickplace.h5"
 # "lewm_seq_trainonly.pt" 
 # "lewm_seq.pt" 
 # "lewm.pt"
