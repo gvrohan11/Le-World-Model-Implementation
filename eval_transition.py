@@ -7,15 +7,21 @@ from train3 import DATASET, SEQ_LEN, DIM, split_episodes
 from models.encoder import Encoder
 from models.predictor2 import ActionEncoder, Predictor, ProjectionHead
 
-CKPT_PATH = "lewm_real_extra.pt"
+CKPT_PATH = "lewm_real_extra_residual.pt" # "lewm_real_extra.pt"
 CAMERA = "pixels_front"
 BATCH_SIZE = 16
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def main():
-    train_episodes, _, test_episodes = split_episodes()
-    EVAL_SPLIT = "train"
-    eval_episodes = train_episodes if EVAL_SPLIT == "train" else test_episodes
+    train_episodes, val_episodes, test_episodes = split_episodes()
+    EVAL_SPLIT = "val"
+
+    splits = {
+        "train": train_episodes,
+        "val": val_episodes,
+        "test": test_episodes,
+    }
+    eval_episodes = splits[EVAL_SPLIT]
 
     train_ds = SO100Sequences(
         DATASET,
@@ -102,8 +108,8 @@ def main():
             z = projector(z).reshape(batch, seq, DIM)
 
             action_embeddings = action_encoder(actions)
-            predicted = pred_proj(
-                predictor(z[:,:-1], action_embeddings)
+            predicted = z[:, :-1] + pred_proj(
+                predictor(z[:, :-1], action_embeddings)
             )
 
             targets = z[:, 1:]
@@ -118,12 +124,18 @@ def main():
 
             middle_target = targets[:, 1]
             shift_predictions = {
-                "previous_action": pred_proj(
-                    predictor(z[:, :-1], action_encoder(previous_actions))
+                "previous_action": (
+                    z[:, :-1]
+                    + pred_proj(
+                        predictor(z[:, :-1], action_encoder(previous_actions))
+                    )
                 )[:, 1],
                 "current_action": predicted[:, 1],
-                "next_action": pred_proj(
-                    predictor(z[:, :-1], action_encoder(next_actions))
+                "next_action": (
+                    z[:, :-1]
+                    + pred_proj(
+                        predictor(z[:, :-1], action_encoder(next_actions))
+                    )
                 )[:, 1],
                 "persistence": persistence[:, 1],
             }
@@ -147,7 +159,7 @@ def main():
             }
 
             zero_action_embeddings = action_encoder(torch.zeros_like(actions))
-            zero_action_prediction = pred_proj(
+            zero_action_prediction = z[:, :-1] + pred_proj(
                 predictor(z[:, :-1], zero_action_embeddings)
             )
             batch_errors["zero_action"] = (
@@ -158,7 +170,7 @@ def main():
                 permutation = torch.randperm(batch, device=DEVICE)
                 shuffled_actions = actions[permutation]
                 shuffled_embeddings = action_encoder(shuffled_actions)
-                shuffled_prediction = pred_proj(
+                shuffled_prediction = z[:, :-1] + pred_proj(
                     predictor(z[:, :-1], shuffled_embeddings)
                 )
                 batch_errors["shuffled_action"] = (

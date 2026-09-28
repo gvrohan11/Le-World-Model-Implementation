@@ -19,7 +19,7 @@ EPOCHS = 100
 SIGREG_W = 0.09
 LOG_EVERY = 100
 CKPT_EVERY_EPOCHS = 5
-CKPT_PATH = "lewm_real_extra.pt" # "lewm_seq_projectors.pt" # "lewm_seq.pt"
+CKPT_PATH = "lewm_real_extra_residual.pt" # "lewm_real_extra.pt" # "lewm_seq_projectors.pt" # "lewm_seq.pt"
 
 SEQ_LEN = 4
 HISTORY = SEQ_LEN - 1
@@ -60,6 +60,9 @@ def main():
     projector = ProjectionHead(DIM).to(device)
     pred_proj = ProjectionHead(DIM).to(device)
 
+    nn.init.zeros_(pred_proj.net[-1].weight)
+    nn.init.zeros_(pred_proj.net[-1].bias)
+
     trainable_params = (
         list(encoder.parameters())
         + list(action_encoder.parameters())
@@ -98,8 +101,9 @@ def main():
 
             # z_hat = predictor(z[:, :-1], action_embedding)
             # pred_loss = nn.functional.mse_loss(z_hat, z[:, 1:])
-            z_hat = predictor(z[:, :-1], action_embedding)
-            z_hat = pred_proj(z_hat)
+            z_hat = z[:, :-1] + pred_proj(
+                predictor(z[:, :-1], action_embedding)
+            )
             pred_loss = nn.functional.mse_loss(z_hat, z[:, 1:])
             reg_loss = sigreg_loss(z)
             loss = pred_loss + (SIGREG_W * reg_loss)
