@@ -66,6 +66,8 @@ def main():
     }
     n_values = 0
     n_windows = 0
+    dynamic_model_errors = []
+    dynamic_persistence_errors = []
 
     train_mean = train_ds.action_mean.to(DEVICE)
     train_std = train_ds.action_std.to(DEVICE)
@@ -95,6 +97,15 @@ def main():
 
             targets = z[:, 1:]
             persistence = z[:, :-1]
+
+            # Per-transition MSE, averaged over latent dimensions.
+            model_transition_mse = (predicted - targets).square().mean(dim=-1)
+            persistence_transition_mse = (persistence - targets).square().mean(dim=-1)
+
+            dynamic_model_errors.append(model_transition_mse.cpu().flatten())
+            dynamic_persistence_errors.append(
+                persistence_transition_mse.cpu().flatten()
+            )
 
             batch_errors = {
                 "model": (predicted - targets).square(),
@@ -135,6 +146,25 @@ def main():
 
     model_mse = totals["model"] / n_values
     persistence_mse = totals["persistence"] / n_values
+    model_errors = torch.cat(dynamic_model_errors)
+    persistence_errors = torch.cat(dynamic_persistence_errors)
+
+    # Select the quarter of transitions where the persistence baseline
+    # makes the largest errors (the transitions with the most latent change).
+    threshold = torch.quantile(persistence_errors, 0.75)
+    dynamic_mask = persistence_errors >= threshold
+
+    print("Largest-change quarter of transitions:")
+    print(f"  transitions: {dynamic_mask.sum().item()}")
+    print(
+        f"  model MSE: "
+        f"{model_errors[dynamic_mask].mean().item():.6f}"
+    )
+    print(
+        f"  persistence MSE: "
+        f"{persistence_errors[dynamic_mask].mean().item():.6f}"
+    )
+
     print(f"Model / persistence MSE: {model_mse / persistence_mse:.3f}")
 
 
