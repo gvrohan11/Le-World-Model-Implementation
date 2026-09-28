@@ -13,7 +13,9 @@ BATCH_SIZE = 16
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def main():
-    _, _, test_episodes = split_episodes()
+    train_episodes, _, test_episodes = split_episodes()
+    EVAL_SPLIT = "train"
+    eval_episodes = train_episodes if EVAL_SPLIT == "train" else test_episodes
 
     train_ds = SO100Sequences(
         DATASET,
@@ -24,7 +26,7 @@ def main():
     test_ds = SO100Sequences(
         DATASET,
         seq_len=SEQ_LEN,
-        episodes=test_episodes,
+        episodes=eval_episodes,
         camera=CAMERA
     )
 
@@ -174,9 +176,13 @@ def main():
         print(f"{name:16s}: {total / shift_count:.6f}")
 
     print(f"Checkpoint: {CKPT_PATH}")
-    print(f"Test episodes: {len(test_episodes)}")
-    print(f"Test sequence windows: {n_windows}")
-    print("Held-out latent prediction MSE (lower is better):")
+    print(f"Evaluation split: {EVAL_SPLIT}")
+    print(f"Evaluation episodes: {len(eval_episodes)}")
+    print(f"Sequence windows: {n_windows}")
+    print(f"Latent prediction MSE on {EVAL_SPLIT} episodes (lower is better):")
+    # print(f"Test episodes: {len(test_episodes)}")
+    # print(f"Test sequence windows: {n_windows}")
+    # print("Held-out latent prediction MSE (lower is better):")
     for name, total in totals.items():
         print(f"{name:16s}: {total / n_values:.6f}")
 
