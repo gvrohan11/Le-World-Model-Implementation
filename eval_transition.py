@@ -14,7 +14,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def main():
     train_episodes, val_episodes, test_episodes = split_episodes()
-    EVAL_SPLIT = "val"
+    EVAL_SPLIT = "test" # "val"
 
     splits = {
         "train": train_episodes,
