@@ -7,41 +7,43 @@ from train3 import DATASET, SEQ_LEN, DIM, split_episodes
 from models.encoder import Encoder
 from models.predictor2 import ActionEncoder, Predictor, ProjectionHead
 
-
 CKPT_PATH = "lewm_real_extra.pt"
 CAMERA = "pixels_front"
 BATCH_SIZE = 16
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
 def main():
     _, _, test_episodes = split_episodes()
 
-    # Training-set action statistics are needed to reproduce train3's inputs.
     train_ds = SO100Sequences(
         DATASET,
         seq_len=SEQ_LEN,
-        episodes=split_episodes()[0],
-        camera=CAMERA,
+        episodes=split_episodes()[0]
     )
 
-    # Only evaluate on the held-out test episodes.
     test_ds = SO100Sequences(
         DATASET,
         seq_len=SEQ_LEN,
         episodes=test_episodes,
-        camera=CAMERA,
+        camera=CAMERA
     )
+
     loader = DataLoader(
         test_ds,
-        batch_size=BATCH_SIZE,
+        batch_size = BATCH_SIZE,
         shuffle=False,
-        num_workers=2,
+        num_workers=2
     )
 
     encoder = Encoder(
-        img_size=224, patch=16, in_ch=3, dim=DIM, depth=12, heads=3
+        img_size=224,
+        patch=16,
+        in_ch=3,
+        dim=DIM,
+        depth=12,
+        heads=3
     ).to(DEVICE)
+
     action_encoder = ActionEncoder(action_dim=6, dim=DIM).to(DEVICE)
     predictor = Predictor(dim=DIM, num_frames=SEQ_LEN - 1).to(DEVICE)
     projector = ProjectionHead(DIM).to(DEVICE)
@@ -54,7 +56,7 @@ def main():
     projector.load_state_dict(checkpoint["projector"])
     pred_proj.load_state_dict(checkpoint["pred_proj"])
 
-    models = (encoder, action_encoder, predictor, projector, pred_proj)
+    models = [encoder, action_encoder, predictor, projector, pred_proj]
     for model in models:
         model.eval()
 
@@ -62,8 +64,16 @@ def main():
         "model": 0.0,
         "persistence": 0.0,
         "zero_action": 0.0,
-        "shuffled_action": 0.0,
+        "shuffled_action": 0.0
     }
+    shift_totals = {
+        "previous_action": 0.0,
+        "current_action": 0.0,
+        "next_action": 0.0,
+        "persistence": 0.0
+    }
+
+    shift_count = 0
     n_values = 0
     n_windows = 0
     dynamic_model_errors = []
@@ -79,37 +89,59 @@ def main():
             frames = frames.to(DEVICE)
             actions_test_normalized = actions_test_normalized.to(DEVICE)
 
-            # Undo test-set normalization, then apply train3's training-set
-            # action normalization. This matches the checkpoint's inputs.
-            raw_actions = actions_test_normalized * test_std + test_mean
+            raw_actions = (actions_test_normalized * test_std) + test_mean
             actions = (raw_actions - train_mean) / (train_std + 1e-6)
 
             batch, seq, channels, height, width = frames.shape
             z = encoder(
                 frames.reshape(batch * seq, channels, height, width)
+
             )
             z = projector(z).reshape(batch, seq, DIM)
 
             action_embeddings = action_encoder(actions)
             predicted = pred_proj(
-                predictor(z[:, :-1], action_embeddings)
+                predictor(z[:,:-1], action_embeddings)
             )
 
             targets = z[:, 1:]
             persistence = z[:, :-1]
 
-            # Per-transition MSE, averaged over latent dimensions.
+            previous_actions = torch.cat(
+                (actions[:, :1], actions[:, :-1]), dim=1
+            )
+            next_actions = torch.cat(
+                (actions[:, 1:], actions[:, -1:]), dim=1
+            )
+
+            middle_target = targets[:, 1]
+            shift_predictions = {
+                "previous_action": pred_proj(
+                    predictor(z[:, :-1], action_encoder(previous_actions))
+                )[:, 1],
+                "current_action": predicted[:, 1],
+                "next_action": pred_proj(
+                    predictor(z[:, :-1], action_encoder(next_actions))
+                )[:, 1],
+                "persistence": persistence[:, 1],
+            }
+
+            for name, prediction in shift_predictions.items():
+                shift_totals[name] += (
+                    (prediction - middle_target).square().sum().item()
+                )
+
+            shift_count += middle_target.numel()
+
             model_transition_mse = (predicted - targets).square().mean(dim=-1)
             persistence_transition_mse = (persistence - targets).square().mean(dim=-1)
 
             dynamic_model_errors.append(model_transition_mse.cpu().flatten())
-            dynamic_persistence_errors.append(
-                persistence_transition_mse.cpu().flatten()
-            )
+            dynamic_persistence_errors.append(persistence_transition_mse.cpu().flatten())
 
             batch_errors = {
                 "model": (predicted - targets).square(),
-                "persistence": (persistence - targets).square(),
+                "persistence": (persistence - targets).square()
             }
 
             zero_action_embeddings = action_encoder(torch.zeros_like(actions))
@@ -137,6 +169,10 @@ def main():
             n_values += targets.numel()
             n_windows += batch
 
+    print("Middle-transition MSE by action offset (lower is better):")
+    for name, total in shift_totals.items():
+        print(f"{name:16s}: {total / shift_count:.6f}")
+
     print(f"Checkpoint: {CKPT_PATH}")
     print(f"Test episodes: {len(test_episodes)}")
     print(f"Test sequence windows: {n_windows}")
@@ -149,8 +185,6 @@ def main():
     model_errors = torch.cat(dynamic_model_errors)
     persistence_errors = torch.cat(dynamic_persistence_errors)
 
-    # Select the quarter of transitions where the persistence baseline
-    # makes the largest errors (the transitions with the most latent change).
     threshold = torch.quantile(persistence_errors, 0.75)
     dynamic_mask = persistence_errors >= threshold
 
